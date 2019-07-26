@@ -1,0 +1,16 @@
+
+1) How to Set Up TensorFlow Object Detection on the Raspberry Pi
+  a) https://www.youtube.com/watch?v=npZ-8Nj1YwY
+  b) This is exactly what we want to do. ^
+2) How To Train an Object Detection Classifier Using TensorFlow 1.5 (GPU) on Windows 10
+  a) https://github.com/EdjeElectronics/TensorFlow-Object-Detection-API-Tutorial-Train-Multiple-Objects-Windows-10
+  b) https://www.youtube.com/watch?v=Rgpfk6eYxJA
+  b) This is how we can train our net to recognize whatever we want (Poop)
+3) Image Classification in 10 Minutes with MNIST Dataset
+  a) https://towardsdatascience.com/image-classification-in-10-minutes-with-mnist-dataset-54c35b77a38d
+  b) Mnist dataset solved in python
+4) CNN for MNIST using TensorFlow (testing script)
+  a) convolutional_network_raw.py
+  b) https://github.com/aymericdamien/TensorFlow-Examples/blob/master/examples/3_NeuralNetworks/convolutional_network_raw.py
+5) TensorFlow Model Zoo
+  a) https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md
