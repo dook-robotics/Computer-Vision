@@ -9,3 +9,128 @@
   of work and at minimum complete the project in ref 2. Ideally, I am able to finish the project in ref
   2 and then modify it to recognize cards in general. That would be enough to have a team try and put
   that model on the Pi and start working on movements.
+
+7/27/2019
+  11:00am
+  Successfully installed TensorFlow GPU v1.10.0, cuDNN, and CUDA using ref 6.
+  Ran hello world tensorflow version. Going to start with the tut from ref 2 now
+  Anaconda env tfGPUTestP3.5
+  11:40
+  creating new Anaconda env that is a copy of tfGPUTestP3.5 called testGPUTF
+  Added the following to TestGPUTF (ref 2)
+  (tensorflow1) C:\> conda install -c anaconda protobuf
+  (tensorflow1) C:\> pip install pillow
+  (tensorflow1) C:\> pip install lxml
+  (tensorflow1) C:\> pip install Cython
+  (tensorflow1) C:\> pip install contextlib2
+  (tensorflow1) C:\> pip install jupyter
+  (tensorflow1) C:\> pip install matplotlib
+  (tensorflow1) C:\> pip install pandas
+  (tensorflow1) C:\> pip install opencv-python
+  Tensorflow is still working in the new env
+
+  testGPUTF
+
+  # Name                    Version                   Build  Channel
+_tflow_select             2.1.0                       gpu
+absl-py                   0.4.1                    py35_0
+astor                     0.7.1                    py35_0
+attrs                     19.1.0                   pypi_0    pypi
+backcall                  0.1.0                    pypi_0    pypi
+blas                      1.0                         mkl
+bleach                    3.1.0                    pypi_0    pypi
+certifi                   2018.8.24                py35_1
+colorama                  0.4.1                    pypi_0    pypi
+contextlib2               0.5.5                    pypi_0    pypi
+cudatoolkit               9.0                           1                     // Important
+cudnn                     7.6.0                 cuda9.0_0
+cycler                    0.10.0                   pypi_0    pypi
+cython                    0.29.13                  pypi_0    pypi
+decorator                 4.4.0                    pypi_0    pypi
+defusedxml                0.6.0                    pypi_0    pypi
+entrypoints               0.3                      pypi_0    pypi
+gast                      0.2.0                    py35_0
+grpcio                    1.12.1           py35h1a1b453_0
+icc_rt                    2019.0.0             h0cc432a_1
+intel-openmp              2019.4                      245
+ipykernel                 5.1.1                    pypi_0    pypi
+ipython                   7.7.0                    pypi_0    pypi
+ipython-genutils          0.2.0                    pypi_0    pypi
+ipywidgets                7.5.0                    pypi_0    pypi
+jedi                      0.14.1                   pypi_0    pypi
+jinja2                    2.10.1                   pypi_0    pypi
+jsonschema                3.0.1                    pypi_0    pypi
+jupyter                   1.0.0                    pypi_0    pypi
+jupyter-client            5.3.1                    pypi_0    pypi
+jupyter-console           6.0.0                    pypi_0    pypi
+jupyter-core              4.5.0                    pypi_0    pypi
+kiwisolver                1.1.0                    pypi_0    pypi
+libprotobuf               3.6.0                h1a1b453_0
+lxml                      4.4.0                    pypi_0    pypi
+markdown                  2.6.11                   py35_0
+markupsafe                1.1.1                    pypi_0    pypi
+matplotlib                3.0.3                    pypi_0    pypi
+mistune                   0.8.4                    pypi_0    pypi
+mkl                       2018.0.3                      1
+mkl_fft                   1.0.6            py35hdbbee80_0
+mkl_random                1.0.1            py35h77b88f5_1
+nbconvert                 5.5.0                    pypi_0    pypi
+nbformat                  4.4.0                    pypi_0    pypi
+notebook                  6.0.0                    pypi_0    pypi
+numpy                     1.15.2           py35ha559c80_0
+numpy-base                1.15.2           py35h8128ebf_0
+opencv-python             4.1.0.25                 pypi_0    pypi
+pandas                    0.25.0                   pypi_0    pypi
+pandocfilters             1.4.2                    pypi_0    pypi
+parso                     0.5.1                    pypi_0    pypi
+pickleshare               0.7.5                    pypi_0    pypi
+pillow                    6.1.0                    pypi_0    pypi
+pip                       19.2.1                   pypi_0    pypi
+prometheus-client         0.7.1                    pypi_0    pypi
+prompt-toolkit            2.0.9                    pypi_0    pypi
+protobuf                  3.6.0            py35he025d50_0
+pygments                  2.4.2                    pypi_0    pypi
+pyparsing                 2.4.1.1                  pypi_0    pypi
+pyrsistent                0.15.3                   pypi_0    pypi
+python                    3.5.6                he025d50_0
+python-dateutil           2.8.0                    pypi_0    pypi
+pytz                      2019.1                   pypi_0    pypi
+pywinpty                  0.5.5                    pypi_0    pypi
+pyzmq                     18.0.2                   pypi_0    pypi
+qtconsole                 4.5.2                    pypi_0    pypi
+send2trash                1.5.0                    pypi_0    pypi
+setuptools                40.2.0                   py35_0
+six                       1.11.0                   py35_1
+tensorboard               1.10.0           py35he025d50_0
+tensorflow                1.10.0          gpu_py35ha5d5ef7_0
+tensorflow-base           1.10.0          gpu_py35h6e53903_0
+tensorflow-gpu            1.10.0               hf154084_0
+termcolor                 1.1.0                    py35_1
+terminado                 0.8.2                    pypi_0    pypi
+testpath                  0.4.2                    pypi_0    pypi
+tornado                   6.0.3                    pypi_0    pypi
+traitlets                 4.3.2                    pypi_0    pypi
+vc                        14.1                 h0510ff6_4
+vs2015_runtime            14.15.26706          h3a45250_4
+wcwidth                   0.1.7                    pypi_0    pypi
+webencodings              0.5.1                    pypi_0    pypi
+werkzeug                  0.15.4                     py_0
+wheel                     0.31.1                   py35_0
+widgetsnbextension        3.5.0                    pypi_0    pypi
+win-unicode-console       0.5                      pypi_0    pypi
+wincertstore              0.2              py35hfebbdb8_0
+zlib                      1.2.11               h62dcd97_3
+
+12:15
+The test script object_detection_tutorial.ipynb works in the testGPUTF environment.
+launch with command jupyter notebook object_detection_tutorial.ipynb
+Finished with 15:23 of ref 2. Taking a break for lunch.
+
+Left to do today:
+  Find resolution of images in test picture see if they need to be the same
+  Find another image to test with and see the results.
+  -------
+  Download and experiment with the masking software
+  -------
+  In general work towards completing ref 2.
+  It would be awesome if I can complete ref 2 before dinner.

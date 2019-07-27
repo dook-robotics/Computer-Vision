@@ -14,3 +14,6 @@
   b) https://github.com/aymericdamien/TensorFlow-Examples/blob/master/examples/3_NeuralNetworks/convolutional_network_raw.py
 5) TensorFlow Model Zoo
   a) https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md
+6) TensorFlow GPU install guide
+  a) https://www.youtube.com/watch?v=RplXYjxgZbw
+  b) Get the most updated versions of what you're installing
