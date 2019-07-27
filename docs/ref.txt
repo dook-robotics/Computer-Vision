@@ -17,3 +17,6 @@
 6) TensorFlow GPU install guide
   a) https://www.youtube.com/watch?v=RplXYjxgZbw
   b) Get the most updated versions of what you're installing
+7) Lableimg
+  a) We will use labelimg to label out images
+  b) https://github.com/tzutalin/labelImg#installation

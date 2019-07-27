@@ -1,8 +1,0 @@
-List all conda envs
-  conda info --envs
-
-Start env
-  activate (env-name)
-
-Application to start
-  Anaconda prompt
