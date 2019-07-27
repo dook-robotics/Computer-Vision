@@ -36,20 +36,12 @@ Notes:
 
 // ---------- //
 Train custom model
-
-Notes:
-  1) ref 2
-
-6) Collect needed images
-  a) Set size, use the same camera
-7) Label images
-8) Train model
-
 // ---------- //
+
 Port model to pi
 
 Notes:
   1) ref 1
 
-9) Get model on Pi
+6) Get model on Pi
   a) Optimize fpps

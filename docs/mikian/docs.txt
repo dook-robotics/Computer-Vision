@@ -1,0 +1,11 @@
+7/26/2019
+  I met with Gio and got the Pi camera. I was able to write a few scripts to take a still image
+  and to show a live video feed until a kill key ('q') is pressed. Those scripts wont be uploaded
+  until I get SSH working on my desktop. I tried for several hours to install TensorFlow onto the
+  Pi but was unable to. I think that installing it from scratch will yield better results
+  (wipe the pi and start over). I was able to get TF installed on my computer earlier this morning
+  and ran a test cnn for the Mnist dataset on it. I am using Anaconda to manage my installs and versions.
+  Still very new to Anaconda environments but figuring it out. Tomorrows goal is to put in eight hours
+  of work and at minimum complete the project in ref 2. Ideally, I am able to finish the project in ref
+  2 and then modify it to recognize cards in general. That would be enough to have a team try and put
+  that model on the Pi and start working on movements.
