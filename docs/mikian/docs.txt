@@ -131,9 +131,9 @@ wincertstore              0.2              py35hfebbdb8_0
 zlib                      1.2.11               h62dcd97_3
 
 12:15
-The test script object_detection_tutorial.ipynb works in the testGPUTF environment.
-launch with command jupyter notebook object_detection_tutorial.ipynb
-Finished with 15:23 of ref 2. Taking a break for lunch.
+  The test script object_detection_tutorial.ipynb works in the testGPUTF environment.
+  launch with command jupyter notebook object_detection_tutorial.ipynb
+  Finished with 15:23 of ref 2. Taking a break for lunch.
 
 Left to do today:
   Find resolution of images in test picture see if they need to be the same (done)
@@ -148,18 +148,18 @@ Left to do today:
   Edited original test script to also identify a picture of a cell phone. It said it was a tv
   but thats okay at least we are able to give it images that don't fit a cookie cutter
 
-Less that 200kb each around 350 pictures for training
-less than 720x1280 resolution 20/80 split test/train
+  Less that 200kb each around 350 pictures for training
+  less than 720x1280 resolution 20/80 split test/train
 
-Dont forget to re run this command every anaconda window
-set PYTHONPATH=C:\tensorflow1\models;C:\tensorflow1\models\research;C:\tensorflow1\models\research\slim
+  Dont forget to re run this command every anaconda window
+  set PYTHONPATH=C:\tensorflow1\models;C:\tensorflow1\models\research;C:\tensorflow1\models\research\slim
 
 2:30
-Ran into some problems with version compatibility back to where I was before lunch but with older verion
+  Ran into some problems with version compatibility back to where I was before lunch but with older verion
 
 2:45
-After many trials I finally got the example from ref 2 training as expected. I also was able to bring up a
-tensorboard which is pretty cool. I will let the model train for an hour or so letting me take a break.
+  After many trials I finally got the example from ref 2 training as expected. I also was able to bring up a
+  tensorboard which is pretty cool. I will let the model train for an hour or so letting me take a break.
 
 Next steps:
   I want to recreate the steps to get this training to run so that I know it wasnt a fluke
@@ -201,23 +201,61 @@ Next steps:
   Next up, train one more model test it on another new image. Then hook up the webcam and try it there
 
 4:20
-Successfully ran model with webcam to identify some playing cards. Will make note of process and upload
-the revised code and pointers as well.
+  Successfully ran model with webcam to identify some playing cards. Will make note of process and upload
+  the revised code and pointers as well.
 
-File is in ref2tut/webCamDetection.py
+  File is in ref2tut/webCamDetection.py
 
-use idle to open up the web cam script and then f5 to run it. Make sure no other application is using webcam.
+  use idle to open up the web cam script and then f5 to run it. Make sure no other application is using webcam.
 
 4:40
 
-Final notes for now, today I started and finished the tut from ref 2. I got the webcam working and detecting cards
-however the model was not very accurate so I am going to let it train for a few hours until later tonight and
-try again. I am excited by this progress the next step is to relabel all of the cards as just 'card' rather than
-'jack' 'king' and such. This will then setup for us to start with a 'card pickeruper' and then move into retraining
-for poop. The biggest next hassle will be to make sure that the model we train on the computer is suitable and
-compatible with the Pi. Reference 1 has some great information in that area once we get the robot trained for just cards.
+  Final notes for now, today I started and finished the tut from ref 2. I got the webcam working and detecting cards
+  however the model was not very accurate so I am going to let it train for a few hours until later tonight and
+  try again. I am excited by this progress the next step is to relabel all of the cards as just 'card' rather than
+  'jack' 'king' and such. This will then setup for us to start with a 'card pickeruper' and then move into retraining
+  for poop. The biggest next hassle will be to make sure that the model we train on the computer is suitable and
+  compatible with the Pi. Reference 1 has some great information in that area once we get the robot trained for just cards.
 
-In the mean time, teams can take pictures of playdough poop and start labeling them with labelimg, starting next week
-they should also be able to attempt to put tensorflow and out model on the Pi.
+  In the mean time, teams can take pictures of playdough poop and start labeling them with labelimg, starting next week
+  they should also be able to attempt to put tensorflow and out model on the Pi.
 
-Next session goal: Same thing but just identifying them as cards (Maybe even a dot at the center)
+  Next session goal: Same thing but just identifying them as cards (Maybe even a dot at the center)
+
+10:30pm
+  Working on relabeling all of the images to 'card'
+
+11:30pm
+  Wrote an awesome script to do this all for me in python check it out in cardcv
+  Replaced all of the ids for the cards as just card not a rank.
+  Sadly this is only useful once but still amazing because it saves over a day of work
+
+  Going to check out the newest network and try it out on the web cam one more time
+  because its fun but mostly because I want to make sure I can still do that
+
+11:45
+  The model def still works better than before but not 100% but thats okay because all we
+  care about is detection and not classification.
+
+  Going to try and train on the newest dataset
+
+12:00
+  Important to remember that you will need to change a some things in a few files
+  when classifying a different number of things.
+
+  The new model (with one class) is training now
+
+  Also: This is no longer useful because the current network is detecting AND classifying
+        but we only need to detect. This is not Important now but when it goes on the pi
+        it will be.
+
+  Assuming this works well we can then find the center of the card then we are ready to find
+  a model that can fit on the pi.
+
+1:00am
+  Finishing for tonight. Today I finished a net that detects cards with a webcam feed.
+  Goal for tomorrow: with the limited time that I have I would like to attempt and install
+  tensorflow on the pi again. Also check into if the net I currently have is compatible with the Pi
+
+  I just realized that I have been training using tensorflow GPU and I don't know if that will conflict
+  when it is on the pi. If so, ill train using tensorflow and it shouldn't be a big deal.

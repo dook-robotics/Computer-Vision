@@ -1,0 +1,11 @@
+
+(Some of these can be done simultaneously)
+
+Understand the TF Training code with the goal of removing the classifying part
+Choose a better network that will work on the PI or make sure that this one can
+Collect training images and label them
+Install TensorFlow on the Pi (run hello world)
+Finish the tut in ref 1 on the Pi
+
+Once camera has a mounted position and any object detection is working:
+  Figure out how to take one point on the camera and translate it to another.
