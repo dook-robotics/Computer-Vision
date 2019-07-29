@@ -259,3 +259,54 @@ Next steps:
 
   I just realized that I have been training using tensorflow GPU and I don't know if that will conflict
   when it is on the pi. If so, ill train using tensorflow and it shouldn't be a big deal.
+
+7/28/19
+10:00pm
+  There was a meeting today and I will transcribe some notes later. Right now I am trying to install tf on the pi
+  I was able to get miniConda on it and trying to get a python3.5 envs
+
+  Successfully created an env named py35 with the correct version of python installed.
+  Will now try and hopefully, but its unlikely, to do an install of tf and python 3.5 just like on the pc
+
+  To activate the env on mini conda the command is
+    source activate {name}
+
+  Successfully installed TF on the pi in the Anaconda env called py35tf
+
+11:30pm
+  Currently making the protobuf lib eta 3 hours
+  Watching the rest of his video it looks like he is able to transfer any model onto the pi
+  which is great, he also has another video to get the location of a detected object.
+  I think I can figure that our myself but having that will be helpful.
+  I am hopeful that I can finish this by tomorrow.
+
+  An issue that I see in the future is that I am installing the latest version of tf/protobuf
+  because thats what I got to work so we will see how that plays out in the future
+  I am also very excited to see how easy anaconda is to work with.
+
+  Today I met with some menbers of the team (Austin, Gio, and Eric) and discussed a plan/goals
+  before the start of the semester. We want to low ball it so that way we can be sure to hit them.
+
+  Goal for CS:
+    We want to get any object detection running on the Pi, preferably with a model we trained on tensorflow-gpu
+    on one of our computers. If we can do that then we can stop worrying out 'if' the pi can do it and start
+    working on creating a database of images. Realistically this can happen as soon as I finish ref 1.
+
+  Goal for ME:
+    The ME team wants to have a robot moving around the room without bumping into walls all on internal power.
+    Gio seems to be pretty confident that they can do this before im back from break on Aug 5.
+
+  Tasks for now:
+    Gio:
+      Continue working on actually making the robot (other ME things that are over my head)
+    Austin and Eric:
+      We talked about how we are going to have multiple scripts running on the pi at one time
+      They are going to see if they can get two scripts talking to each other while running
+    Me:
+      I am working on getting tensorflow installed on the pi (done) and to complete reference 1
+
+  We talked about how the mult different scripts are going to interact with each other.
+  The goal is to not have everything in one script to avoid a 'choppy' looking robot.
+  After Austin and Eric figure out how two python scripts can talk to each other we can
+  make a better plan on how to most efficiently do this. Also it doesnt matter if they all
+  dont work individually.

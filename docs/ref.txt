@@ -20,3 +20,5 @@
 7) Lableimg
   a) We will use labelimg to label out images
   b) https://github.com/tzutalin/labelImg#installation
+8) Deploying to pi
+  a) https://stackoverflow.com/questions/40431989/how-to-deploy-trained-tensorflow-network-on-e-g-raspberry-pi
