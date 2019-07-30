@@ -310,3 +310,12 @@ Next steps:
   After Austin and Eric figure out how two python scripts can talk to each other we can
   make a better plan on how to most efficiently do this. Also it doesnt matter if they all
   dont work individually.
+
+  make check command 7:56 in ref 1
+
+7/29/2019
+7:30pm
+  Starting work on comms between two python script.
+
+  Create new anaconda env
+    conda create --name myenv
