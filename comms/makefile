@@ -1,7 +1,7 @@
 
 CC = gcc
 
-all: RootParent ChildFifoTest
+all: RootParent ChildFifoTest fifo
 
 RootParent: RootParent.c
 	$(CC) -o $@ $<
@@ -9,5 +9,8 @@ RootParent: RootParent.c
 ChildFifoTest: ChildFifoTest.c
 	$(CC) -o $@ $<
 	
+fifo:
+	mkfifo "ReadWriteBuffer";
 	
 clean:
+	rm "ReadWriteBuffer";
