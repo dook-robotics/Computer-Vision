@@ -1,11 +1,20 @@
 import sys
 import os
 
-# A writes, B reads
-path = "fifoab" # name of the fifo i had created using mkfifo command in my terminal 'mkfifo fifobc'
+print("b.py started")
 
-fd = os.open(path, os.O_RDONLY) #C type open a file and return an int file descriptor
+# A writes, B reads
+rpath = "000001" # name of the fifo i had created using mkfifo command in my terminal 'mkfifo fifobc'
+wpath = "001000" # name of the fifo i had created using mkfifo command in my terminal 'mkfifo fifobc'
+
+fd = os.open(rpath, os.O_RDONLY) #C type open a file and return an int file descriptor
 os.set_blocking(fd, False) # setting the reader to NON_BLOCKING so if it reads from an empty pipe it does not yield until it receives data (continues its own code)
+
+def sendA(string):
+    fd = os.open('001000', os.O_WRONLY) #C type open a file and return an int file descriptor
+    string = "001010" + string + "#" #the String we will write to the pipe
+    os.write(fd,str.encode(string))
+    os.close(fd)
 
 while True:
     doneReading = False
@@ -28,10 +37,14 @@ while True:
             if buffer is not None: #if we read something, print that what we read and that we are done reading
                 readSomething = True;
                 string = string + buffer.decode()
-                if(string != "" and string[len(string)-1] == '\n'):
+                if(string != "" and string[len(string)-1] == '#'):
                     buffer = None
-                    print("b: ", string)
-                    string = ""
+                    if("$" in string):
+                        sendA(string[7:len(string)-1])
+                        string = ""
+                    else:
+                        print("B: ", string)
+                        string = ""
     else:
         print( path + " is not readable")
 

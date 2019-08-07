@@ -319,3 +319,47 @@ Next steps:
 
   Create new anaconda env
     conda create --name myenv
+
+8/4/2019
+10:00am
+  Working on getting comms working with key presses. The goal is to get a "triangle" like comm system that
+  can be expanded with more nodes.
+
+12:20pm
+  I got the comms to work from a top down parent program on a key press. so A talks to b and c when a key is pressed
+  not totally there yes and not super clean code but its progress.
+
+I worked alot on comms that day and met with Austin to try and get CV on the pi without any luck
+
+8/7/2019
+12:00
+  Started working on comms again. Im pretty sure Ive got the structure together now just to write the function
+
+1:10
+  Message structure is as follows
+  SenderReciverMessage#
+  eg.
+  001010Message#
+
+  000 parent
+  001 sctipt A (prob TF)
+  010 ...
+  ...
+
+  1:40
+  Able to send messages from one child to another through the parent
+  Next is to try and get the parent listen to multiple children
+
+  2:00
+  made great progress on the comms side of things. Still working on getting
+  the parent to listen to two children at the same time. Should just be
+  looping trough an array. Breaking for lunch
+
+  3:15
+    Starting work on comms again
+
+  4:20
+    Picked up Pi from Austin
+    Ill work on that tomorrow.
+    Im going to upload the code I have now to github
+    for the comms so he can check it out

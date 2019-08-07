@@ -1,7 +1,6 @@
 ######## Webcam Object Detection Using Tensorflow-trained Classifier #########
 #
 # Author: Evan Juras
-# Edited: Mikian Musser
 # Date: 1/20/18
 # Description:
 # This program uses a TensorFlow-trained classifier to perform object detection.
@@ -9,7 +8,14 @@
 # It draws boxes and scores around the objects of interest in each frame from
 # the webcam.
 
-# Original code is from Evan Juras but I had to modify it to get it to work
+## Some of the code is copied from Google's example at
+## https://github.com/tensorflow/models/blob/master/research/object_detection/object_detection_tutorial.ipynb
+
+## and some is copied from Dat Tran's example at
+## https://github.com/datitran/object_detector_app/blob/master/object_detection_app.py
+
+## but I changed it to make it more understandable to me.
+
 
 # Import packages
 import os
@@ -24,6 +30,12 @@ sys.path.append("..")
 # Import utilites
 from utils import label_map_util
 from utils import visualization_utils as vis_util
+
+threshold = 0.8
+
+# width = 1280
+# height = 720
+
 
 # Name of the directory containing the object detection module we're using
 MODEL_NAME = 'inference_graph'
@@ -98,6 +110,7 @@ while(True):
         feed_dict={image_tensor: frame_expanded})
 
     # Draw the results of the detection (aka 'visulaize the results')
+    # print("frame")
     vis_util.visualize_boxes_and_labels_on_image_array(
         frame,
         np.squeeze(boxes),
@@ -106,9 +119,23 @@ while(True):
         category_index,
         use_normalized_coordinates=True,
         line_thickness=8,
-        min_score_thresh=0.60)
-
+        min_score_thresh=threshold)
+    width = video.get(cv2.CAP_PROP_FRAME_WIDTH)   # float
+    height = video.get(cv2.CAP_PROP_FRAME_HEIGHT) # float
+    index = 0;
+    for box in np.squeeze(boxes):
+        ymin = int((box[0]*height))
+        xmin = int((box[1]*width))
+        ymax = int((box[2]*height))
+        xmax = int((box[3]*width))
+        Result = np.array(frame[ymin:ymax,xmin:xmax])
+        if(scores[0][index] >= threshold):
+            cv2.circle(frame,(int((xmin + xmax)/2),int((ymin + ymax)/2)),5,(0,255,0),-1)
+        index = index + 1
+    # print(Result)
     # All the results have been drawn on the frame, so it's time to display it.
+
+    # cv2.circle(frame,(int((xmin + xmax)/2),int((ymin + ymax)/2)),5,(0,255,0),-1)
     cv2.imshow('Object detector', frame)
 
     # Press 'q' to quit
