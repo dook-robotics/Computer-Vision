@@ -363,3 +363,7 @@ I worked alot on comms that day and met with Austin to try and get CV on the pi 
     Ill work on that tomorrow.
     Im going to upload the code I have now to github
     for the comms so he can check it out
+
+8/8/2019
+  5:00
+  

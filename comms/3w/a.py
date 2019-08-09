@@ -66,14 +66,12 @@ def listenForChildren(child):
     global doneReading
     buffer = ""
     childID = children[child % len(children)]
-    print("listening", childID)
     fd = os.open(childID + PARENT, os.O_RDONLY) #C type open a file and return an int file descriptor
     os.set_blocking(fd, False) # setting the reader to NON_BLOCKING so if it reads from an empty pipe it does not yield until it receives data (continues its own code)
 
     doneReading = False
     readSomething = False
     string = ""
-
     if fd >=0: #check for error on opening the file
         i =0;
         while not doneReading:
@@ -87,22 +85,24 @@ def listenForChildren(child):
                         doneReading = True;# we read everything in the pipe
                 else:
                     raise  # otherwise raise the exception because it is not something we were expecting/handling ourselves
+
+            # print(buffer is not None) this is true most of the time even when not reading...
             if buffer is not None: #if we read something, print that what we read and that we are done reading
+                if(buffer.decode() == ""):
+                    return
                 readSomething = True;
                 string = string + buffer.decode()
                 if(string != "" and string[len(string)-1] == '#'):
                     buffer = None
                     decodeMessage(string)
                     string = ""
-            # else:
-            #     doneReading = True
     else:
         print(rpath + " is not readable")
     os.close(fd)
 
 def decodeMessage(string):
-    sender = string[:3]
-    if(sender == PARENT):
+    rec = string[3:6]
+    if(rec == PARENT):
         handleMessage(string[6:])
     else:
         sendMessage(string)
@@ -147,6 +147,5 @@ c = 0
 while listen:
     if(started):
         listenForChildren(c)
-        print("Listening to next child")
         c = c+1
     continue
