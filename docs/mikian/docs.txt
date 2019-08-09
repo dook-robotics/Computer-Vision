@@ -417,3 +417,11 @@ I worked alot on comms that day and met with Austin to try and get CV on the pi 
 
   Once we get things working during the semester we need to have one team member only working
   on this problem. I would like to do that.
+
+4:30pm
+  After doing some research I think we should try training on
+  ssdlite_mobilenet_v2_coco
+  it is in the model zoo
+  https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md
+  Deved in april and this is the paper with it
+  https://arxiv.org/pdf/1801.04381.pdf
