@@ -6,11 +6,15 @@ import atexit
 from pynput import keyboard
 
 # Define exit function
+# Stop Keyboard listeners
+# TODO: Should send signals to children to stop schd
 def stopListen():
     listener.stop()
     print("Listeners Stoped")
     print("Program Exit Successfully")
 
+# Start child processes
+# TODO: Make this into a loop through child names
 def start():
     print("Starting Children...")
     child_pid = os.fork()
@@ -23,8 +27,8 @@ def start():
             os.system('python3 b.py')
             exit()
 
+# Main listen loop/Function
 def listenForChildren(child):
-    
     buffer = ""
     childID = children[child % len(children)]
     fd = os.open(childID + PARENT, os.O_RDONLY) #C type open a file and return an int file descriptor
