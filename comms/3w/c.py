@@ -17,12 +17,6 @@ def sendMessage():
     message = "001000emptyC#"
     return
 
-def sendA(string):
-    fd = os.open('010000', os.O_WRONLY) #C type open a file and return an int file descriptor
-    string = "010001" + string + "#" #the String we will write to the pipe
-    os.write(fd,str.encode(string))
-    os.close(fd)
-
 ## Start Script ##
 
 message = "010000emptyC#"
@@ -34,7 +28,7 @@ atexit.register(stopSch)
 
 sched = Scheduler()
 sched.start()
-sched.add_interval_job(sendMessage, seconds = 1)
+sched.add_interval_job(sendMessage, seconds = .1)
 
 fd = os.open(rpath, os.O_RDONLY) #C type open a file and return an int file descriptor
 os.set_blocking(fd, False) # setting the reader to NON_BLOCKING so if it reads from an empty pipe it does not yield until it receives data (continues its own code)

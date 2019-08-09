@@ -393,3 +393,27 @@ I worked alot on comms that day and met with Austin to try and get CV on the pi 
   seeing as that will be a hefty process.
 
   Going to work on comms again right now, thats more enjoyable
+
+9:00am
+  Stopping after working on comms, there is a problem with os open
+  but major problem resolved of having too many files opened at one time
+  correctly closing files now
+
+12:00pm
+  Starting working on the new tensorflow model.
+
+2:00pm
+  I have the model training right now.
+  ssd_mobilenet_v1_coco_2018_01_28
+  It is def slower than the other one but that is to be expected.
+  On ref 1 or 2 he trains it for 8 hours. I stop it once I am back
+  from tonights meetings.
+  steps are taking about 1.3 seconds. as compared to about 0.1 something on
+  the other model. This one should work much better on the Pi but it is
+  obvious that we will need to learn much more about tensorflow to create
+  a better network.
+
+  I think we should keep our expectations low. Only go for on concrete set size/color
+
+  Once we get things working during the semester we need to have one team member only working
+  on this problem. I would like to do that.

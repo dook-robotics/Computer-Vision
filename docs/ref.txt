@@ -22,3 +22,8 @@
   b) https://github.com/tzutalin/labelImg#installation
 8) Deploying to pi
   a) https://stackoverflow.com/questions/40431989/how-to-deploy-trained-tensorflow-network-on-e-g-raspberry-pi
+9) Python Code Style Guide
+  a) https://github.com/google/styleguide/blob/gh-pages/pyguide.md
+10) Reading to improve the network
+  a) https://github.com/tensorflow/models/tree/master/research/object_detection
+  

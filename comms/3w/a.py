@@ -10,6 +10,9 @@ from pynput import keyboard
 # TODO: Should send signals to children to stop schd
 def stopListen():
     listener.stop()
+    for index in range(0,len(children)):
+        os.close(fdr[index])
+        # os.close(fdw[index])
     print("Listeners Stoped")
     print("Program Exit Successfully")
 
@@ -29,41 +32,40 @@ def start():
 
 # Main listen loop/Function
 def listenForChildren(child):
-    buffer = ""
-    childID = children[child % len(children)]
-    fd = os.open(childID + PARENT, os.O_RDONLY) #C type open a file and return an int file descriptor
-    os.set_blocking(fd, False) # setting the reader to NON_BLOCKING so if it reads from an empty pipe it does not yield until it receives data (continues its own code)
-
+    buffer = None
+    childID = child % len(children)
+    #os.set_blocking(fd, False) # setting the reader to NON_BLOCKING so if it reads from an empty pipe it does not yield until it receives data (continues its own code)
     doneReading = False
-    readSomething = False
     string = ""
-    if fd >=0: #check for error on opening the file
-        i =0;
+    if fdr[childID] >=0: #check for error on opening the file
         while not doneReading:
             try:  #using a try catch block for if the reader opens the fifo before the writer and trys reading, the program wont crash due to an unneccessary error
-                buffer = os.read(fd,1) #C type read of read from int file descriptor and read a number of bytes i.e 1
+                buffer = os.read(fdr[childID],1) #C type read of read from int file descriptor and read a number of bytes i.e 1
             except OSError as err:
+                print("error.errno is ", err.errno)
                 if err.errno == os.errno.EAGAIN or err.errno == os.errno.EWOULDBLOCK: #If one of these errors is detected treat it as nothing and reset our read variable to nothing
-                    if not readSomething:
-                        buffer = None
-                    else:
-                        doneReading = True;# we read everything in the pipe
+
+                    buffer = None
+                    doneReading = True
                 else:
-                    raise  # otherwise raise the exception because it is not something we were expecting/handling ourselves
+                    print("here in else")
+                      # otherwise raise the exception because it is not something we were expecting/handling ourselves
 
             # print(buffer is not None) this is true most of the time even when not reading...
-            if buffer is not None: #if we read something, print that what we read and that we are done reading
-                if(buffer.decode() == ""):
-                    return
-                readSomething = True;
+            if buffer is not None: #if w3e read something, print that what we read and that we are done reading
+                if(buffer.decode() == "#"):
+                    doneReading = True
                 string = string + buffer.decode()
-                if(string != "" and string[len(string)-1] == '#'):
-                    buffer = None
-                    decodeMessage(string)
-                    string = ""
+
+        if(string != "" and string[len(string)-1] == '#'):
+            buffer = None
+            decodeMessage(string)
+            string = ""
+        elif string !="":
+            print("Failure to end message in fifo with \'#\'")
+
     else:
         print(rpath + " is not readable")
-    os.close(fd)
 
 def decodeMessage(string):
     rec = string[3:6]
@@ -76,9 +78,11 @@ def decodeMessage(string):
 def sendMessage(string):
     sender = string[:3]
     rec = string[3:6]
-    fd = os.open(PARENT+rec, os.O_WRONLY) #C type open a file and return an int file descriptor
-    os.write(fd,str.encode(string))
-    os.close(fd)
+    index =0
+    for index in range(0,len(children)):
+        if children[index] == rec:
+            break
+    os.write(fdr[index],str.encode(string))
     return
 
 def handleMessage(string):
@@ -144,6 +148,10 @@ started = False
 listen = True
 
 os.system('python s.py')
+
+fdr = []
+for index in range(0,len(children)):
+    fdr.append(os.open(children[index] + PARENT, os.O_RDONLY | os.O_NONBLOCK))
 
 listener = keyboard.Listener(on_press=on_press)
 listener.start()
