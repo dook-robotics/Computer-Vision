@@ -366,4 +366,10 @@ I worked alot on comms that day and met with Austin to try and get CV on the pi 
 
 8/8/2019
   5:00
-    
+
+  9:00pm
+  Change python version
+  check the version of python: ls /usr/bin/python*
+  alias: alias python='/usr/bin/pythonxx'
+  re-login: . ~/.bashrc
+  check the python version again: python --version
