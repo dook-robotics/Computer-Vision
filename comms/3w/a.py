@@ -1,3 +1,6 @@
+## Comms Parent ##
+# Authors: Mikian, Austin
+
 import os
 import atexit
 from pynput import keyboard
@@ -5,65 +8,23 @@ from pynput import keyboard
 # Define exit function
 def stopListen():
     listener.stop()
-    print("Listener stoped")
-
-# Define key listener
-def on_press(key):
-    global started
-    global listen
-    global doneReading
-
-    try:
-        if('{0}'.format(key.char) == 's' and not started):
-            started = True
-            start()
-
-        if('{0}'.format(key.char) == 'l'):
-            doneReading = True
-            listen = False
-
-        if('{0}'.format(key.char) == 'c' and started):
-            fd = os.open(PARENT + C, os.O_WRONLY)
-            string = PARENT + C + "Message#"
-            os.write(fd,str.encode(string))
-            os.close(fd)
-
-        if('{0}'.format(key.char) == 'b' and started):
-            fd = os.open(PARENT + B, os.O_WRONLY)
-            string = PARENT + B + "Message#"
-            os.write(fd,str.encode(string))
-            os.close(fd)
-
-        if('{0}'.format(key.char) == 'd' and started):
-            fd = os.open(PARENT + C, os.O_WRONLY)
-            string = PARENT + C + "$Message#"
-            os.write(fd,str.encode(string))
-            os.close(fd)
-
-        if('{0}'.format(key.char) == 'g' and started):
-            fd = os.open(PARENT + B, os.O_WRONLY)
-            string = PARENT + B + "$Message#"
-            os.write(fd,str.encode(string))
-            os.close(fd)
-
-    except AttributeError:
-        return
+    print("Listeners Stoped")
+    print("Program Exit Successfully")
 
 def start():
     print("Starting Children...")
     child_pid = os.fork()
     if(child_pid == 0):
         os.system('python3 c.py')
-        listen = False
+        exit()
     else:
         child_pid = os.fork()
         if(child_pid == 0):
             os.system('python3 b.py')
-            listen = False
-
+            exit()
 
 def listenForChildren(child):
-    global doneReading
+    
     buffer = ""
     childID = children[child % len(children)]
     fd = os.open(childID + PARENT, os.O_RDONLY) #C type open a file and return an int file descriptor
@@ -120,6 +81,46 @@ def handleMessage(string):
     print(PARENT,"Handler:", string)
     return
 
+# Define key listener
+def on_press(key):
+    global started
+    try:
+        # Start child scripts
+        if('{0}'.format(key.char) == 's' and not started):
+            started = True
+            start()
+
+        # Send message to C
+        if('{0}'.format(key.char) == 'c' and started):
+            fd = os.open(PARENT + C, os.O_WRONLY)
+            string = PARENT + C + "Message#"
+            os.write(fd,str.encode(string))
+            os.close(fd)
+
+        # Send message to B
+        if('{0}'.format(key.char) == 'b' and started):
+            fd = os.open(PARENT + B, os.O_WRONLY)
+            string = PARENT + B + "Message#"
+            os.write(fd,str.encode(string))
+            os.close(fd)
+
+        # Send message to C to send a message to B
+        if('{0}'.format(key.char) == 'd' and started):
+            fd = os.open(PARENT + C, os.O_WRONLY)
+            string = PARENT + C + "$Message#"
+            os.write(fd,str.encode(string))
+            os.close(fd)
+
+        # Send message to B to send a message to C
+        if('{0}'.format(key.char) == 'g' and started):
+            fd = os.open(PARENT + B, os.O_WRONLY)
+            string = PARENT + B + "$Message#"
+            os.write(fd,str.encode(string))
+            os.close(fd)
+
+    except AttributeError:
+        return
+
 ## START SCRIPT ##
 
 # set exit function
@@ -144,7 +145,7 @@ listener = keyboard.Listener(on_press=on_press)
 listener.start()
 
 c = 0
-while listen:
+while True:
     if(started):
         listenForChildren(c)
         c = c+1
