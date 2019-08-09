@@ -373,3 +373,23 @@ I worked alot on comms that day and met with Austin to try and get CV on the pi 
   alias: alias python='/usr/bin/pythonxx'
   re-login: . ~/.bashrc
   check the python version again: python --version
+
+8/9/2019
+7:00am
+  Updates from yesterday and the day before.
+  We started experimenting with comms on the Pi and ran into issues with
+  the scheduler. I think this can be resolved by just installing the lib
+  Successfully but that has proven to be difficult. Austin is also working on
+  a version of the comms without using a scheduler. I am going to keep working
+  on a version with a scheduler. Today I plan on minimizing the number of
+  os calls like os open and close.
+  Updates from CV we got cv2 and tensorflow working and the Object detection
+  working. It ran at the 1-1.25 frames a second that we thought it would.
+  Good news: we are able to transfer any model we train on a computer onto the
+  pi with just moving a few files. Bad news: the model that I trained using TF
+  on my computer is way too bulky for the PI and runs at like 0.06 frames
+  and thats unexceptable. I think that this can be resolved by choosing a
+  different model from the model farm. I dont want to do any of that today
+  seeing as that will be a hefty process.
+
+  Going to work on comms again right now, thats more enjoyable
