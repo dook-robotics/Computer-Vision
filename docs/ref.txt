@@ -26,4 +26,5 @@
   a) https://github.com/google/styleguide/blob/gh-pages/pyguide.md
 10) Reading to improve the network
   a) https://github.com/tensorflow/models/tree/master/research/object_detection
-  
+11) Raspberry Pi 4 (RPi4) & Google Coral Live object detection using MobileNet-SSD 70FPS!
+  a)https://www.youtube.com/watch?v=T-VjYr7sZC4

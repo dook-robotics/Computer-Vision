@@ -425,3 +425,44 @@ I worked alot on comms that day and met with Austin to try and get CV on the pi 
   https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md
   Deved in april and this is the paper with it
   https://arxiv.org/pdf/1801.04381.pdf
+
+10:25pm
+  Met with others today, updates to be typed out Tomorrow
+  mobilenet_ssd_v2_coco_quant_postprocess_edgetpu
+
+8/10/2019
+9:00am
+  Let the model train overnight just to refresh I am training on
+  ssd_mobilenet_v1_coco_2018_01_28
+  Since then I have found many other candidates for the base net
+  1)  ssd_mobilenet_v2_coco
+  2)  ssdlite_mobilenet_v2_coco
+  3)  mobilenet_ssd_v2_coco_quant_postprocess_edgetpu
+  I am going to export the model and test it on the pi
+  mostly looking for a target fps rather an accuracy
+  Also a few things to note that number 3 on that list
+  has done up to 30 fps which is amazing.
+  There is also a bit of hardware sold by google
+  that is said to speed up the pi its like $125
+  So we will have to look into that.
+  With limited time today my goal is to get that network exported
+  and on the pi and then start training the next network
+
+  Export Successful:
+  python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/ssd_mobilenet_v1_coco.config --trained_checkpoint_prefix training/model.ckpt-56327 --output_directory ssd_mobilenet_v1_coco_inference_graph
+
+  Files needed for transfer to the Pi:
+    "model.zip"
+      model/
+      model/checkpoint
+      model/frozen_inference_graph.pb
+      model/model.ckpt.data-00000-of-00001
+      model/model.ckpt.index
+      model/model.ckpt.meta
+      model/saved_model/
+      model/saved_model/saved_model.pb
+      model/saved_model/variables/
+      label_map.pbtxt
+
+  Later today, throw it on the Pi, check fps/accuracy mostly caring about fps
+  and then start training the next model
