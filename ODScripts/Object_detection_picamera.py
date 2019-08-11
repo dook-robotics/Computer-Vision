@@ -1,8 +1,8 @@
 ######## Picamera Object Detection Using Tensorflow Classifier #########
 #
-# Author: Evan Juras
+# Author: Evan Juras, Mikian Musser
 # Date: 4/15/18
-# Description: 
+# Description:
 # This program uses a TensorFlow classifier to perform object detection.
 # It loads the classifier uses it to perform object detection on a Picamera feed.
 # It draws boxes and scores around the objects of interest in each frame from
@@ -31,8 +31,8 @@ import sys
 # Set up camera constants
 IM_WIDTH = 1280
 IM_HEIGHT = 720
-#IM_WIDTH = 640    Use smaller resolution for
-#IM_HEIGHT = 480   slightly faster framerate
+# IM_WIDTH = 640    Use smaller resolution for
+# IM_HEIGHT = 480   slightly faster framerate
 
 # Select camera type (if user enters --usbcam when calling this script,
 # a USB webcam will be used)
@@ -52,9 +52,11 @@ from utils import label_map_util
 from utils import visualization_utils as vis_util
 
 # Name of the directory containing the object detection module we're using
-MODEL_NAME = 'ssdlite_mobilenet_v2_coco_2018_05_09' #Default
+################################ CHANGE ################################
+#MODEL_NAME = 'ssdlite_mobilenet_v2_coco_2018_05_09' #Default
 MODEL_NAME = 'ssd_mobilenet_v1_coco_2018' # test card on mobile
 #MODEL_NAME = 'card'
+################################ CHANGE ################################
 
 # Grab path to current working directory
 CWD_PATH = os.getcwd()
@@ -69,8 +71,10 @@ PATH_TO_LABELS = os.path.join(CWD_PATH,'data', 'cardssd_labelmap.pbtxt')
 #PATH_TO_LABELS = os.path.join(CWD_PATH,'data','labelmap.pbtxt')
 
 # Number of classes the object detector can identify
+################################ CHANGE ################################
 #NUM_CLASSES = 90
 NUM_CLASSES = 1
+################################ CHANGE ################################
 
 ## Load the label map.
 # Label maps map indices to category names, so that when the convolution
@@ -135,7 +139,7 @@ if camera_type == 'picamera':
     for frame1 in camera.capture_continuous(rawCapture, format="bgr",use_video_port=True):
 
         t1 = cv2.getTickCount()
-        
+
         # Acquire frame and expand frame dimensions to have shape: [1, None, None, 3]
         # i.e. a single-column array, where each item in the column has the pixel RGB value
         frame = np.copy(frame1.array)
@@ -157,6 +161,18 @@ if camera_type == 'picamera':
             use_normalized_coordinates=True,
             line_thickness=8,
             min_score_thresh=0.40)
+        width = video.get(cv2.CAP_PROP_FRAME_WIDTH)   # float
+        height = video.get(cv2.CAP_PROP_FRAME_HEIGHT) # float
+        index = 0;
+        for box in np.squeeze(boxes):
+            ymin = int((box[0]*height))
+            xmin = int((box[1]*width))
+            ymax = int((box[2]*height))
+            xmax = int((box[3]*width))
+            Result = np.array(frame[ymin:ymax,xmin:xmax])
+            if(scores[0][index] >= 0.4):
+                cv2.circle(frame,(int((xmin + xmax)/2),int((ymin + ymax)/2)),5,(0,255,0),-1)
+            index = index + 1
 
         cv2.putText(frame,"FPS: {0:.2f}".format(frame_rate_calc),(30,50),font,1,(255,255,0),2,cv2.LINE_AA)
 
@@ -208,7 +224,7 @@ elif camera_type == 'usb':
             min_score_thresh=0.85)
 
         cv2.putText(frame,"FPS: {0:.2f}".format(frame_rate_calc),(30,50),font,1,(255,255,0),2,cv2.LINE_AA)
-        
+
         # All the results have been drawn on the frame, so it's time to display it.
         cv2.imshow('Object detector', frame)
 
@@ -223,4 +239,3 @@ elif camera_type == 'usb':
     camera.release()
 
 cv2.destroyAllWindows()
-

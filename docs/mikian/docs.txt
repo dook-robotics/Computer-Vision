@@ -484,3 +484,9 @@ I worked alot on comms that day and met with Austin to try and get CV on the pi 
   us to get that "36 fps" on reference 11
 
   I want to train ssdlite_mobilenet_v2_coco next
+
+9:30
+  The model seems to have similar performance to the v1. We will have to
+  see the difference on the Pi. I am going to stop it about at the time area
+  around 56k steps (Or whatever it is when I wake up)
+ 
