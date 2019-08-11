@@ -33,3 +33,10 @@
 13) edgetpu training / retraining
   a) https://coral.withgoogle.com/docs/edgetpu/retrain-detection/
   b) https://coral.withgoogle.com/docs/edgetpu/compiler/
+14) How to solve our tracking problem
+  a) https://medium.com/@manivannan_data/multiple-object-tracking-algorithms-a01973272e52
+  b) https://medium.com/@manivannan_data/object-tracking-referenced-with-the-previous-frame-using-euclidean-distance-49118730051a
+15) MOSSE Tracking Example
+  a) https://www.pyimagesearch.com/2018/07/30/opencv-object-tracking/
+16) Object tracking API
+  a) https://docs.opencv.org/3.1.0/d9/df8/group__tracking.html

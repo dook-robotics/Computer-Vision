@@ -1,6 +1,6 @@
 ######## Webcam Object Detection Using Tensorflow-trained Classifier #########
 #
-# Author: Evan Juras
+# Author: Evan Juras, Mikian Musser
 # Date: 1/20/18
 # Description:
 # This program uses a TensorFlow-trained classifier to perform object detection.
@@ -31,7 +31,7 @@ sys.path.append("..")
 from utils import label_map_util
 from utils import visualization_utils as vis_util
 
-threshold = 0.8
+threshold = 0.6
 
 # width = 1280
 # height = 720
@@ -96,6 +96,10 @@ video = cv2.VideoCapture(0)
 #ret = video.set(3,1280)
 #ret = video.set(4,720)
 
+tracker = cv2.TrackerMOSSE_create()
+initBB = None
+detect = False
+
 while(True):
 
     # Acquire frame and expand frame dimensions to have shape: [1, None, None, 3]
@@ -132,6 +136,38 @@ while(True):
         if(scores[0][index] >= threshold):
             cv2.circle(frame,(int((xmin + xmax)/2),int((ymin + ymax)/2)),5,(0,255,0),-1)
         index = index + 1
+    cv2.line(frame, (int(width/2-25),0), (int(width/2-25),int(height)), (0,0,255),5) #left
+    cv2.line(frame, (int(width/2+25),0), (int(width/2+25),int(height)), (0,0,255),5) #right
+    primaryx = int((boxes[0][0][1]*width + boxes[0][0][3]*width)/2)
+
+    success = False
+    if(scores[0][0] >= threshold):
+        initBB = (boxes[0][0][1]*width,boxes[0][0][0]*height,boxes[0][0][3]*width-boxes[0][0][1]*width,boxes[0][0][2]*height-boxes[0][0][0]*height)
+        print(initBB)
+        tracker.init(frame, initBB)
+        detect = True
+    else:
+        initBB = None
+        tracker = cv2.TrackerMOSSE_create()
+
+    if(initBB is not None):
+        (success, box) = tracker.update(frame)
+        H = 0
+        if success:
+            (x, y, w, h) = [int(v) for v in box]
+            cv2.rectangle(frame, (x, y), (x + w, y + h),
+            (0, 255, 0), 2)
+        info = [("Tracker", "MOSSE"),("Success", "Yes" if success else "No"),]
+        for (i, (k, v)) in enumerate(info):
+            text = "{}: {}".format(k, v)
+            cv2.putText(frame, text, (10, H - ((i * 20) + 20)),
+            cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
+    if(primaryx > int(width/2+25) and scores[0][0] >= threshold):
+        print("Move Left")
+    elif(primaryx < int(width/2-25) and scores[0][0] >= threshold):
+        print("Move Right")
+    elif(primaryx > int(width/2-25) and primaryx < int(width/2+25) and scores[0][0] >= threshold):
+        print("Move forrward, suck")
     # print(Result)
     # All the results have been drawn on the frame, so it's time to display it.
 

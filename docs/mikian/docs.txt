@@ -489,4 +489,10 @@ I worked alot on comms that day and met with Austin to try and get CV on the pi 
   The model seems to have similar performance to the v1. We will have to
   see the difference on the Pi. I am going to stop it about at the time area
   around 56k steps (Or whatever it is when I wake up)
- 
+
+2:10am
+  Made tons of progress on object tracking
+  I think we are really close to having a Unique id system
+  Think will make picking up with multi objects possible
+  I dont know how well it works on the Pi yet...
+  I will spend tomorrow commenting the detection scripts
