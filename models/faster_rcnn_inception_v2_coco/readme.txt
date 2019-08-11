@@ -1,0 +1,1 @@
+this is trained on card (singluar)
