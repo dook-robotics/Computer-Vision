@@ -556,4 +556,16 @@ the photos from the pi and its just a really long, but effective process
 I heard from Austin that he got linux on the pi, I think we should stick with
 raspian but if we can use standard linux without losing any preformance then
 thats the prefered option. I am going to upload a few links to the Database repo
-later tonight 
+later tonight
+
+Plans for the week of 8/12/2019
+  1) Become more comfortable with tf, understand more of whats going on before
+      I get the frozen 'fine tuning' model
+  2) Get the FOV of the robot down and start taking picture/label/processing them
+  3) Comms, try and get another script running on the Pi to just spit out the instructions
+     of what to do. This should be enough to tell us if we need to use more than 1 pi
+
+  Summary:
+    1) Learn more about TF
+    2) Get FOV of camera
+    3) Get two scripts running on the Pi
