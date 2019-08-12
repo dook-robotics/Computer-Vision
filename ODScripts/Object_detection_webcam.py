@@ -6,7 +6,7 @@
 #   Austin Janushan
 
 # Usage
-#   python Object De.py
+#   python Object_detection_webcam.py
 
 # Description
 #   Script to test TF models and tracking algs before ported to Pi
@@ -27,7 +27,8 @@ THRESHOLD = 0.6
 NUM_CLASSES = 1
 
 # File containing the model to use
-MODEL_NAME = 'inference_graph'
+# MODEL_NAME = 'inference_graph' # Default
+MODEL_NAME = 'ssd_mobilenet_v2_coco_inference_graph'
 
 # Get file paths
 CWD_PATH = os.getcwd()

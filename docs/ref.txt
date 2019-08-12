@@ -40,3 +40,7 @@
   a) https://www.pyimagesearch.com/2018/07/30/opencv-object-tracking/
 16) Object tracking API
   a) https://docs.opencv.org/3.1.0/d9/df8/group__tracking.html
+17) dataset from scratch (more on the tf process)
+  a) https://towardsdatascience.com/creating-your-own-object-detector-ad69dda69c85
+18) More on dataset creation
+  a) https://towardsdatascience.com/building-a-toy-detector-with-tensorflow-object-detection-api-63c0fdf2ac95

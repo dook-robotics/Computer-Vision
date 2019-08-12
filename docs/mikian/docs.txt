@@ -189,6 +189,7 @@ Next steps:
   To test on an image its pretty simple: python Object_detection_image.py
   To train - (Training actually continued from where it left off)
   python train.py --logtostderr --train_dir=training/ --pipeline_config_path=training/faster_rcnn_inception_v2_pets.config
+  python train.py --logtostderr --train_dir=training/ --pipeline_config_path=training/ssdlite_mobilenet_v2_coco.config
 
   These three files need to be in the training folder to train from scratch
   faster_rcnn_inception_v2_pets.config (Model config file)
@@ -496,3 +497,63 @@ I worked alot on comms that day and met with Austin to try and get CV on the pi 
   Think will make picking up with multi objects possible
   I dont know how well it works on the Pi yet...
   I will spend tomorrow commenting the detection scripts
+
+8/11/2019
+3:00pm
+  Going to export the model I trained last night as put it on the Pi
+
+4:10pm
+  After a little testing it appears this network is better than the last
+  both still suffer from detection from far away just I suspect thats the
+  dataset problem not the network problem
+
+  It also appeared that the network was on average faster maintaining a 1.2-1.3
+  fps
+
+  I am going to start training the next model
+  ssdlite_mobilenet_v2_coco
+  and see how it compares
+
+6:00pm
+  Breaking for dinner, going to regroup before the next week.
+  Id like to have a break down of things to get done before the
+  semester begins
+
+  Im slightly nervous that the config files for the past 2 models have been
+  wrong, I dont think thats the case but I can confirm after this model is
+  done training.
+
+  I want to start getting pictures as soon as possible, mapping out the field of
+  view and everything.
+
+8:45pm
+  Going to start working on a plan for this week and the next
+  14 days until the semester starts.
+
+9:40
+  From what Ive read it looks like it doesnt matter what we take the pictures from
+  but we will need to resize them based on the model we will be using.
+  For that reason I think we might want to wait till we have the pi4 and try
+  each of the models before labeling the imgaes. I saw a few scripts that relabeled
+  image after crops though so it shouldn't be too hard.
+
+Initial Dataset Collection Plan
+  1) For every terrain (background) (3) {1350}
+    2) For every poop object (3) {450}
+      3) For every vertical FOV zone (Size zone) (5) {150}
+        4) For every horizontal FOV zone (angle zone) (10-50)
+          5) Take a picture (1)
+
+After we know what the field of view the camera will have we can revise this plan
+
+The ssdlit model is training now and will be done in the morning.
+Tomorrow I would like to try and get the fov figured out if Gio is free
+
+As far as taking the photos it would be awesome if we had the ME team create what
+we have now for the picam but for an iphone. Worst case is that we take all of
+the photos from the pi and its just a really long, but effective process
+
+I heard from Austin that he got linux on the pi, I think we should stick with
+raspian but if we can use standard linux without losing any preformance then
+thats the prefered option. I am going to upload a few links to the Database repo
+later tonight 
