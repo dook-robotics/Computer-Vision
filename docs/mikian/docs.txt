@@ -612,3 +612,25 @@ Plans for the week of 8/12/2019
   and there is no fan. I still think we should use one just in case.
 
   Exciting times
+
+  Things to do next:
+    Fifo comms with the detection script
+
+8/13/2019
+1:00pm
+  Going to work on creating two scripts
+  one for taking pictures and storing them
+  with names for the database
+
+  Another for simulating the fifos
+
+3:45pm
+  It looks like I was able to get a anotation sctipt working but
+  when it installed it messed up something with the tracking lib
+  thats okay because tacking isnt a real issue yet. Next time i
+  install somthing I am going to create a new env so that doesnt
+  happen again.
+
+  Next step is to get that to work on the card data base and understand
+  that init script better. This way we can turn our database into many pictures
+  and save some time.
