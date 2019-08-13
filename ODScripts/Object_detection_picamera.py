@@ -22,7 +22,7 @@ from picamera import PiCamera
 from utils import label_map_util
 from utils import visualization_utils as vis_util
 
-THRESHOLD = 0.6
+THRESHOLD = 0.2
 
 # Set up camera constants
 # We can use smaller resolution for faster frame rates
@@ -39,9 +39,10 @@ sys.path.append('..') # This might be depracated, check once on pi
 # File containing the model to use
 ################################ CHANGE ################################
 #MODEL_NAME = 'ssdlite_mobilenet_v2_coco_2018_05_09' #Default
-#MODEL_NAME = 'ssd_mobilenet_v1_coco_2018' # test card on mobile
-MODEL_NAME = 'ssd_mobilenet_v2_coco_2018' # test card on mobile
-#MODEL_NAME = 'card'
+#MODEL_NAME = 'ssd_mobilenet_v1_coco_2018' # test card on mobile # Same speed as v2 but less acc
+MODEL_NAME = 'ssd_mobilenet_v2_coco_2018' # test card on mobile # Lower fps 1.0-1.2 2/4 0fp
+#MODEL_NAME = 'ssdlite' # test card on mobile # 0fp 0/4
+#MODEL_NAME = 'card' # Able to get all 4, but with terrible fps
 ################################ CHANGE ################################
 
 # Get file paths

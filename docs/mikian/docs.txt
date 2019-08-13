@@ -198,6 +198,7 @@ Next steps:
 
   To export the model:
   python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/faster_rcnn_inception_v2_pets.config --trained_checkpoint_prefix training/model.ckpt-XXXX --output_directory inference_graph
+  python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/XXXX.config --trained_checkpoint_prefix training/model.ckpt-XXXX --output_directory XXX_inference_graph
 
   Next up, train one more model test it on another new image. Then hook up the webcam and try it there
 
@@ -569,3 +570,45 @@ Plans for the week of 8/12/2019
     1) Learn more about TF
     2) Get FOV of camera
     3) Get two scripts running on the Pi
+
+8/12/2019
+1:00pm
+  Finished training the ssdlite model, havent put it on the pi yet but it looks to be more
+  accurate than the ssd_mobilenet_v2
+
+  I bought some foam and put it on the stand for the pi. Hoping to get FoV this week
+
+  Finished setting up the stand and ported the ssdlite model onto the pi
+  it was again faster a steady 1.3 fps but it wasn't very accurate to cards on the table,
+  I am hoping that its because of the images its trained on.
+
+4:00pm
+  Tested all of the networks on 4 cards.
+
+  ssd_mobilenet_v1_coco_2018
+    Same speed as v2 but less accuracy
+  ssd_mobilenet_v2_coco_2018
+    Reasonable speed 1-1.2 frames a second
+    detected 2/4 cards on table
+  ssdlite
+    Fastest 1.3 on average
+    detected 0/4 cards on table
+  card (Ressnet)
+    slowest 0.06 FPS
+    detected all 4 of the cards
+
+5:30pm
+  Awesome update
+  with ssd v2 I was able to get all 4 cards detected, with a fp here and There
+  This only came after removing the plastic infront of the camera that was
+  obstruting or at least altering the view.
+
+  I want to re run the trials with the other models it still is nowhere close to
+  the 99% acc with resnet but thats just not practal.
+
+  I am excited to see how much impact the rpi4 has and if we can use tflit/google coral
+
+  I have left the ssd v2 running for quite some time and it doesnt seem to be over heating
+  and there is no fan. I still think we should use one just in case.
+
+  Exciting times
