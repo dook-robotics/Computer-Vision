@@ -184,12 +184,16 @@ Next steps:
   set PYTHONPATH=C:\tensorflow1\models;C:\tensorflow1\models\research;C:\tensorflow1\models\research\slim
   // SETUP!
 
+  Setup for tensorboard
+  tensorboard --logdir=C:/tensorflow1/models/research/object_detection/training
+
   These three things need to be done to run anything
 
   To test on an image its pretty simple: python Object_detection_image.py
   To train - (Training actually continued from where it left off)
   python train.py --logtostderr --train_dir=training/ --pipeline_config_path=training/faster_rcnn_inception_v2_pets.config
   python train.py --logtostderr --train_dir=training/ --pipeline_config_path=training/ssdlite_mobilenet_v2_coco.config
+  python train.py --logtostderr --train_dir=training/ --pipeline_config_path=training/ssd_mobilenet_v2_coco.config
 
   These three files need to be in the training folder to train from scratch
   faster_rcnn_inception_v2_pets.config (Model config file)
@@ -634,3 +638,19 @@ Plans for the week of 8/12/2019
   Next step is to get that to work on the card data base and understand
   that init script better. This way we can turn our database into many pictures
   and save some time.
+
+5:35pm
+  the picture script now saves to a ubs drive
+  going to try and run that script on the card dataset
+  and train on those. See if there is a difference
+
+6:30pm
+  Need to create a script for cleaning the resized image/xml files
+
+  python generate_tfrecord.py --csv_input=reducedImages\train_labels.csv --image_dir=reducedImages\train --output_path=reducedTrain.record
+  python generate_tfrecord.py --csv_input=reducedImages\test_labels.csv --image_dir=reducedImages\test --output_path=reducedTest.record
+
+8:30pm
+  Finally got the new model training started around 7pm this one is training on the same images as the others
+  but with cops to 300x300 this will hopefully make the network more accurate because there will not be any
+  squishing of data 
