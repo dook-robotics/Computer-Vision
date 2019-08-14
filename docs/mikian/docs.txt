@@ -653,4 +653,20 @@ Plans for the week of 8/12/2019
 8:30pm
   Finally got the new model training started around 7pm this one is training on the same images as the others
   but with cops to 300x300 this will hopefully make the network more accurate because there will not be any
-  squishing of data 
+  squishing of data
+
+8/14/2019
+12:45pm
+  The model ssd_mobilenet_v2 that is currently being trained on the new dataset of croped 300x300 photos
+  is still training and looks to have good results. I am going to let this one train for longer than the others
+  Finally got tensorbard up and running.
+
+  Today id actaully like to work on the comms or FoV
+  Tomorrow I can go back to data augmentation. I was thinking about not only doing crops of 300x300
+  but also crops of other sizes.
+
+2:20pm
+  Finished writing script to talk with the movement script. right now movement does not talk back to OD but that is less Important
+
+3:00pm
+  Created a title template and adding Documentation
