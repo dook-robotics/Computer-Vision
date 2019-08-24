@@ -1,14 +1,26 @@
+## Object_detection_picamera.py ##
 ## Object Detection using TF Model PiCam ##
-
+#
 # Authors:
-#   Mikian Musser
-#   Austin Janushan
-
-# Usage
+#   Mikian Musser - https://github.com/mm909
+#   Eric Becerril-Blas - https://github.com/lordbecerril
+#   Zoyla Orellana - https://github.com/ZoylaO
+#   Austin Janushan - https://github.com/Janushan-Austin
+#   Giovanny Vazquez - https://github.com/giovannyVazquez
+#
+# Organization:
+#   Dook Robotics - https://github.com/dook-robotics
+#
+# Usage:
 #   python Object_detection_picamera.py
-
-# Description
+#
+# Documentation:
 #   Script to run tf model on the Pi
+#
+# Todo:
+#   Check depracated: sys.path.append('..')
+#   Add object tracking TrackerMOSSE
+#
 
 # Imports
 import os
@@ -22,19 +34,18 @@ from picamera import PiCamera
 from utils import label_map_util
 from utils import visualization_utils as vis_util
 
-movement = False
-
 fd = os.open('fifo1', os.O_WRONLY)
 if fd >= 0:
     print("Pipe open")
 
+# Object detection variables
 THRESHOLD = 0.6
-movingF = False
-
 wideSpace = 200
 
-# Set up camera constants
-# We can use smaller resolution for faster frame rates
+# Movement detection (History)
+movingForward = False
+
+# Set up camera constants, use smaller resolution for faster frame rates
 IM_WIDTH = 1280
 IM_HEIGHT = 720
 #IM_WIDTH = 640
@@ -47,9 +58,9 @@ sys.path.append('..') # This might be depracated, check once on pi
 
 # File containing the model to use
 ################################ CHANGE ################################
-#MODEL_NAME = 'ssdlite_mobilenet_v2_coco_2018_05_09' #Default
-#MODEL_NAME = 'ssd_mobilenet_v1_coco_2018' # test card on mobile # Same speed as v2 but less acc
 MODEL_NAME = 'ssd_mobilenet_v2_coco_2018' # test card on mobile # Lower fps 1.0-1.2 2/4 0fp
+#MODEL_NAME = 'ssdlite_mobilenet_v2_coco_2018_05_09' # Default
+#MODEL_NAME = 'ssd_mobilenet_v1_coco_2018' # test card on mobile # Same speed as v2 but less acc
 #MODEL_NAME = 'ssdlite' # test card on mobile # 0fp 0/4
 #MODEL_NAME = 'card' # Able to get all 4, but with terrible fps
 ################################ CHANGE ################################
@@ -60,15 +71,15 @@ PATH_TO_CKPT = os.path.join(CWD_PATH,MODEL_NAME,'frozen_inference_graph.pb')
 
 # Path to label map file
 ################################ CHANGE ################################
-#PATH_TO_LABELS = os.path.join(CWD_PATH,'data','mscoco_label_map.pbtxt')
 PATH_TO_LABELS = os.path.join(CWD_PATH,'data', 'cardssd_labelmap.pbtxt')
+#PATH_TO_LABELS = os.path.join(CWD_PATH,'data','mscoco_label_map.pbtxt')
 #PATH_TO_LABELS = os.path.join(CWD_PATH,'data','labelmap.pbtxt')
 ################################ CHANGE ################################
 
 # Number of classes the object detector can identify
 ################################ CHANGE ################################
-#NUM_CLASSES = 90
 NUM_CLASSES = 1
+#NUM_CLASSES = 90 # Default
 ################################ CHANGE ################################
 
 # Load labels.
@@ -111,7 +122,8 @@ camera.framerate = 10
 rawCapture = PiRGBArray(camera, size=(IM_WIDTH,IM_HEIGHT))
 rawCapture.truncate(0)
 
-for frame1 in camera.capture_continuous(rawCapture, format="bgr",use_video_port=True):
+# For each frame
+for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
     t1 = cv2.getTickCount()
 
     frame = np.copy(frame1.array)
@@ -134,7 +146,7 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr",use_video_port=
         line_thickness=8,
         min_score_thresh=THRESHOLD)
 
-    count = 0
+    detectionCount = 0
     # For every box, find the center, draw a dot
     for index, box in enumerate(np.squeeze(boxes)):
         ymin = int((box[0]*IM_HEIGHT))
@@ -143,41 +155,35 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr",use_video_port=
         xmax = int((box[3]*IM_WIDTH))
         Result = np.array(frame[ymin:ymax,xmin:xmax])
         if(scores[0][index] >= THRESHOLD):
-            count = count + 1
+            detectionCount = detectionCount + 1
             cv2.circle(frame,(int((xmin + xmax)/2),int((ymin + ymax)/2)),5,(0,255,0),-1)
-        
+
     # Draw the center lines
     cv2.line(frame, (int(IM_WIDTH/2-wideSpace),0), (int(IM_WIDTH/2-wideSpace),int(IM_HEIGHT)), (0,0,255),5) #left
     cv2.line(frame, (int(IM_WIDTH/2+wideSpace),0), (int(IM_WIDTH/2+wideSpace),int(IM_HEIGHT)), (0,0,255),5) #right
 
-    #Get the 'primary' card's x value
+    # Get the 'primary' card's x value
     primaryx = int((boxes[0][0][1]*IM_WIDTH + boxes[0][0][3]*IM_WIDTH)/2)
+
     # Send instructions
-    if(primaryx > int(IM_WIDTH/2+wideSpace) and scores[0][0] >= THRESHOLD):
-        #os.write(fd, str.encode("Move Left ("+str(count)+")#"))
+    if primaryx > int(IM_WIDTH/2+wideSpace) and scores[0][0] >= THRESHOLD:
+        #os.write(fd, str.encode("Move Left ("+str(detectionCount)+")#"))
         os.write(fd, str.encode("$R#"))
-        movingF = False
-        movement = True
-        #print("Move Left#")
-    elif(primaryx < int(IM_WIDTH/2-wideSpace) and scores[0][0] >= THRESHOLD):
-        #os.write(fd, str.encode("Move Right ("+str(count)+")#"))
+        movingForward = False
+    elif primaryx < int(IM_WIDTH/2-wideSpace) and scores[0][0] >= THRESHOLD:
+        #os.write(fd, str.encode("Move Right ("+str(detectionCount)+")#"))
         os.write(fd, str.encode("$L#"))
-        movingF = False
-        movement = True
-        #print("Move Right")
-    elif(primaryx > int(IM_WIDTH/2-wideSpace) and primaryx < int(IM_WIDTH/2+wideSpace) and scores[0][0] >= THRESHOLD):
-        #os.write(fd, str.encode("Move Forrward ("+str(count)+")#"))
+        movingForward = False
+    elif primaryx > int(IM_WIDTH/2-wideSpace) and primaryx < int(IM_WIDTH/2+wideSpace) and scores[0][0] >= THRESHOLD:
+        #os.write(fd, str.encode("Move Forrward ("+str(detectionCount)+")#"))
         os.write(fd, str.encode("$F#"))
-        movingF = True
-        movement = True
-        #print("Move Forrward")
+        movingForward = True
+    elif movingForward:
+        os.write(fd, str.encode("$V#"))
+        movingForward = False
     else:
-        if movingF:
-            os.write(fd, str.encode("$V#"))
-        else:
-            os.write(fd, str.encode("$I#"))
-        movingF = False
-        movement = False
+        os.write(fd, str.encode("$I#"))
+        movingForward = False
 
     # Calc Frame Rate
     t2 = cv2.getTickCount()
@@ -197,4 +203,3 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr",use_video_port=
 os.close(fd)
 camera.close()
 cv2.destroyAllWindows()
-
