@@ -1,23 +1,16 @@
-## Object_detection_picamera.py ##
 ## Object Detection using TF Model PiCam ##
-#
-# Authors:
-#   Mikian Musser - https://github.com/mm909
-#   Eric Becerril-Blas - https://github.com/lordbecerril
-#   Zoyla O - https://github.com/ZoylaO
-#   Austin Janushan - https://github.com/Janushan-Austin
-#   Giovanny Vazquez - https://github.com/giovannyVazquez
-#
-# Organization:
-#   Dook Robotics - https://github.com/dook-robotics
-#
-# Usage:
-#   python Object_detection_picamera.py
-#
-# Documentation:
-#
-#
 
+# Authors:
+#   Mikian Musser
+#   Austin Janushan
+
+# Usage
+#   python Object_detection_picamera.py
+
+# Description
+#   Script to run tf model on the Pi
+
+# Imports
 import os
 import cv2
 import argparse
@@ -29,7 +22,12 @@ from picamera import PiCamera
 from utils import label_map_util
 from utils import visualization_utils as vis_util
 
-# accuracy THRESHOLD
+movement = False
+
+fd = os.open('fifo1', os.O_WRONLY)
+if fd >= 0:
+    print("Pipe open")
+
 THRESHOLD = 0.6
 
 # Set up camera constants
@@ -69,14 +67,6 @@ PATH_TO_LABELS = os.path.join(CWD_PATH,'data', 'cardssd_labelmap.pbtxt')
 #NUM_CLASSES = 90
 NUM_CLASSES = 1
 ################################ CHANGE ################################
-
-# Open fifo and check Pipe
-fifo = 'fifo1'
-fd = os.open(fifo, os.O_WRONLY)
-if fd >= 0:
-    print("Pipe open")
-else:
-    print("Error: No pipe named", fifo)
 
 # Load labels.
 label_map = label_map_util.load_labelmap(PATH_TO_LABELS)
@@ -141,9 +131,7 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr",use_video_port=
         line_thickness=8,
         min_score_thresh=THRESHOLD)
 
-    # Count of detections
-    detectionCount = 0
-
+    count = 0
     # For every box, find the center, draw a dot
     for index, box in enumerate(np.squeeze(boxes)):
         ymin = int((box[0]*IM_HEIGHT))
@@ -152,23 +140,34 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr",use_video_port=
         xmax = int((box[3]*IM_WIDTH))
         Result = np.array(frame[ymin:ymax,xmin:xmax])
         if(scores[0][index] >= THRESHOLD):
-            detectionCount = detectionCount + 1
+            count = count + 1
             cv2.circle(frame,(int((xmin + xmax)/2),int((ymin + ymax)/2)),5,(0,255,0),-1)
-
+        
     # Draw the center lines
     cv2.line(frame, (int(IM_WIDTH/2-25),0), (int(IM_WIDTH/2-25),int(IM_HEIGHT)), (0,0,255),5) #left
     cv2.line(frame, (int(IM_WIDTH/2+25),0), (int(IM_WIDTH/2+25),int(IM_HEIGHT)), (0,0,255),5) #right
 
     #Get the 'primary' card's x value
     primaryx = int((boxes[0][0][1]*IM_WIDTH + boxes[0][0][3]*IM_WIDTH)/2)
-
     # Send instructions
     if(primaryx > int(IM_WIDTH/2+25) and scores[0][0] >= THRESHOLD):
-        os.write(fd, str.encode("Move Left     - (" + str(detectionCount) + ")#"))
+        #os.write(fd, str.encode("Move Left ("+str(count)+")#"))
+        os.write(fd, str.encode("$R#"))
+        movement = True
+        #print("Move Left#")
     elif(primaryx < int(IM_WIDTH/2-25) and scores[0][0] >= THRESHOLD):
-        os.write(fd, str.encode("Move Right    - (" + str(detectionCount) + ")#"))
+        #os.write(fd, str.encode("Move Right ("+str(count)+")#"))
+        os.write(fd, str.encode("$L#"))
+        movement = True
+        #print("Move Right")
     elif(primaryx > int(IM_WIDTH/2-25) and primaryx < int(IM_WIDTH/2+25) and scores[0][0] >= THRESHOLD):
-        os.write(fd, str.encode("Move Forrward - (" + str(detectionCount) + ")#"))
+        #os.write(fd, str.encode("Move Forrward ("+str(count)+")#"))
+        os.write(fd, str.encode("$F#"))
+        movement = True
+        #print("Move Forrward")
+    else:
+        os.write(fd, str.encode("$I#"))
+        movement = False
 
     # Calc Frame Rate
     t2 = cv2.getTickCount()
@@ -185,7 +184,7 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr",use_video_port=
 
     rawCapture.truncate(0)
 
-# CleanUp #
 os.close(fd)
 camera.close()
 cv2.destroyAllWindows()
+
