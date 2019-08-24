@@ -46,3 +46,5 @@
   a) https://towardsdatascience.com/building-a-toy-detector-with-tensorflow-object-detection-api-63c0fdf2ac95
 19) impy library for image processing (crops and resizing for tf)
   a) https://github.com/lozuwa/impy
+20) Python source code (Multi Files)
+  a) https://stackoverflow.com/questions/12412595/split-python-source-code-into-multiple-files
