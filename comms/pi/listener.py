@@ -4,7 +4,7 @@
 # Authors:
 #   Mikian Musser - https://github.com/mm909
 #   Eric Becerril-Blas - https://github.com/lordbecerril
-#   Zoyla O - https://github.com/ZoylaO
+#   Zoyla Orellana - https://github.com/ZoylaO
 #   Austin Janushan - https://github.com/Janushan-Austin
 #   Giovanny Vazquez - https://github.com/giovannyVazquez
 #
@@ -35,6 +35,8 @@ GPIO.setmode(GPIO.BCM)                    # programming the GPIO by BCM pin numb
 
 TRIG = 18
 ECHO = 27
+
+RELAIS_1_GPIO = 25
 
 PWM1=17
 DIR1=22
@@ -174,11 +176,27 @@ def handleMessage(message):
     elif message == "B":
         back()
         idleBool = False
+    elif message == "V":
+        relay()
+        LoadCell()
+        #Send message to obj det to return detecting objects
     else:
         print("Error")
     return
 
 
+def relay():
+    print("Turning on relay")
+    GPIO.setup(RELAIS_1_GPIO, GPIO.OUT)
+    GPIO.output(RELAIS_1_GPIO, GPIO.LOW)
+    GPIO.output(RELAIS_1_GPIO, GPIO.HIGH)
+    time.sleep(4)
+    GPIO.output(RELAIS_1_GPIO, GPIO.LOW)
+    return
+
+def LoadCell():
+    print("Load Cell Check")
+    return
 
 # Loop to read from fifo
 def listen():

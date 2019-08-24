@@ -29,6 +29,9 @@ if fd >= 0:
     print("Pipe open")
 
 THRESHOLD = 0.6
+movingF = False
+
+wideSpace = 200
 
 # Set up camera constants
 # We can use smaller resolution for faster frame rates
@@ -144,29 +147,36 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr",use_video_port=
             cv2.circle(frame,(int((xmin + xmax)/2),int((ymin + ymax)/2)),5,(0,255,0),-1)
         
     # Draw the center lines
-    cv2.line(frame, (int(IM_WIDTH/2-25),0), (int(IM_WIDTH/2-25),int(IM_HEIGHT)), (0,0,255),5) #left
-    cv2.line(frame, (int(IM_WIDTH/2+25),0), (int(IM_WIDTH/2+25),int(IM_HEIGHT)), (0,0,255),5) #right
+    cv2.line(frame, (int(IM_WIDTH/2-wideSpace),0), (int(IM_WIDTH/2-wideSpace),int(IM_HEIGHT)), (0,0,255),5) #left
+    cv2.line(frame, (int(IM_WIDTH/2+wideSpace),0), (int(IM_WIDTH/2+wideSpace),int(IM_HEIGHT)), (0,0,255),5) #right
 
     #Get the 'primary' card's x value
     primaryx = int((boxes[0][0][1]*IM_WIDTH + boxes[0][0][3]*IM_WIDTH)/2)
     # Send instructions
-    if(primaryx > int(IM_WIDTH/2+25) and scores[0][0] >= THRESHOLD):
+    if(primaryx > int(IM_WIDTH/2+wideSpace) and scores[0][0] >= THRESHOLD):
         #os.write(fd, str.encode("Move Left ("+str(count)+")#"))
         os.write(fd, str.encode("$R#"))
+        movingF = False
         movement = True
         #print("Move Left#")
-    elif(primaryx < int(IM_WIDTH/2-25) and scores[0][0] >= THRESHOLD):
+    elif(primaryx < int(IM_WIDTH/2-wideSpace) and scores[0][0] >= THRESHOLD):
         #os.write(fd, str.encode("Move Right ("+str(count)+")#"))
         os.write(fd, str.encode("$L#"))
+        movingF = False
         movement = True
         #print("Move Right")
-    elif(primaryx > int(IM_WIDTH/2-25) and primaryx < int(IM_WIDTH/2+25) and scores[0][0] >= THRESHOLD):
+    elif(primaryx > int(IM_WIDTH/2-wideSpace) and primaryx < int(IM_WIDTH/2+wideSpace) and scores[0][0] >= THRESHOLD):
         #os.write(fd, str.encode("Move Forrward ("+str(count)+")#"))
         os.write(fd, str.encode("$F#"))
+        movingF = True
         movement = True
         #print("Move Forrward")
     else:
-        os.write(fd, str.encode("$I#"))
+        if movingF:
+            os.write(fd, str.encode("$V#"))
+        else:
+            os.write(fd, str.encode("$I#"))
+        movingF = False
         movement = False
 
     # Calc Frame Rate
