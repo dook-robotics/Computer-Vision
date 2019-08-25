@@ -156,6 +156,10 @@ def LoadCell():
     print("Load Cell Check")
     return
 
+def voltage():
+    print("Voltage Check")
+    return
+
 # Motor Pins
 PWM1=17
 DIR1=22
@@ -268,10 +272,6 @@ frame_rate_calc = 1
 freq = cv2.getTickFrequency()
 font = cv2.FONT_HERSHEY_SIMPLEX
 
-# Init Tracker and the tracker's bounding box
-# tracker = cv2.TrackerMOSSE_create()
-# initBB = None
-
 # Initialize Picamera and grab reference to the raw capture
 camera = PiCamera()
 camera.resolution = (IM_WIDTH,IM_HEIGHT)
@@ -280,6 +280,7 @@ rawCapture = PiRGBArray(camera, size=(IM_WIDTH,IM_HEIGHT))
 rawCapture.truncate(0)
 
 # For each frame
+frameCount = 0
 for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
     t1 = cv2.getTickCount()
 
@@ -334,10 +335,16 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port
         movingForward = True
     elif movingForward:
         relay()
+        LoadCell()
         movingForward = False
     else:
         idle()
         movingForward = False
+
+    # Check voltage every 60 frames (once a min)
+    if frameCount % 60 == 0:
+        voltage()
+    frameCount = frameCount + 1
 
     # Calc Frame Rate
     t2 = cv2.getTickCount()
@@ -345,7 +352,7 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port
     frame_rate_calc = 1 / time1
 
     # Display frame rate and draw to screen
-    cv2.putText(frame,"FPS: {0:.2f}".format(frame_rate_calc),(30,50),font,1,(255,255,0),2,cv2.LINE_AA)
+    cv2.putText(frame, "FPS: {0:.2f}".format(frame_rate_calc), (30,50), font, 1, (255,255,0), 2, cv2.LINE_AA)
     cv2.imshow('Object detector', frame)
 
     # Press 'q' to quit
