@@ -678,3 +678,8 @@ Plans for the week of 8/12/2019
 
 2:45pm
   Got the motors and the relay to work with the OD script. Going to comment everything now
+
+8/25/2019
+9:30
+  This morning Im going to try and write the script to not have to have that communication
+  one master script. We can test this out on monday

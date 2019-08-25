@@ -2,11 +2,14 @@
 ## Listen for movement commands from OD script ##
 #
 # Authors:
-#   Mikian Musser - https://github.com/mm909
+#   Mikian Musser      - https://github.com/mm909
 #   Eric Becerril-Blas - https://github.com/lordbecerril
-#   Zoyla Orellana - https://github.com/ZoylaO
-#   Austin Janushan - https://github.com/Janushan-Austin
-#   Giovanny Vazquez - https://github.com/giovannyVazquez
+#   Zoyla Orellana     - https://github.com/ZoylaO
+#   Austin Janushan    - https://github.com/Janushan-Austin
+#   Giovanny Vazquez   - https://github.com/giovannyVazquez
+#   Brandon Herrera    -
+#   Ameera Essaqi      -
+#   Esdras Morales     -
 #
 # Organization:
 #   Dook Robotics - https://github.com/dook-robotics
@@ -21,50 +24,12 @@
 #   Create a better Idle alg without using sleeps
 #
 
-import sys
 import os
-import errno
+import sys
 import time
+import errno
 import atexit
 import RPi.GPIO as GPIO
-
-# Motor Pins
-PWM1=17
-DIR1=22
-PWM2=23
-DIR2=24
-
-# US Pins
-TRIG = 18
-ECHO = 27
-
-# Relay Pin
-RELAIS_1_GPIO = 25
-
-idleBool = True
-USCNT = 0
-
-# programming the GPIO by BCM pin numbers
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BCM)
-
-# initialize GPIO Pins for Motor
-GPIO.setup(DIR1,GPIO.OUT)
-GPIO.setup(PWM1,GPIO.OUT)
-GPIO.setup(DIR2,GPIO.OUT)
-GPIO.setup(PWM2,GPIO.OUT)
-
-# initialize GPIO Pins for US
-GPIO.setup(TRIG,GPIO.OUT)
-GPIO.setup(ECHO,GPIO.IN)
-
-# Set frequency of PWM
-pwm = GPIO.PWM(PWM1, 100)
-pwm2 = GPIO.PWM(PWM2, 100)
-
-# Initialize
-pwm.start(0)
-pwm2.start(0)
 
 def stopListen():
     GPIO.cleanup()
@@ -242,6 +207,44 @@ def listen():
             doneReading = True
     return
 
+
+# Motor Pins
+PWM1=17
+DIR1=22
+PWM2=23
+DIR2=24
+
+# US Pins
+TRIG = 18
+ECHO = 27
+
+# Relay Pin
+RELAIS_1_GPIO = 25
+
+idleBool = True
+USCNT = 0
+
+# programming the GPIO by BCM pin numbers
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+
+# initialize GPIO Pins for Motor
+GPIO.setup(DIR1,GPIO.OUT)
+GPIO.setup(PWM1,GPIO.OUT)
+GPIO.setup(DIR2,GPIO.OUT)
+GPIO.setup(PWM2,GPIO.OUT)
+
+# initialize GPIO Pins for US
+GPIO.setup(TRIG,GPIO.OUT)
+GPIO.setup(ECHO,GPIO.IN)
+
+# Set frequency of PWM
+pwm = GPIO.PWM(PWM1, 100)
+pwm2 = GPIO.PWM(PWM2, 100)
+
+# Initialize
+pwm.start(0)
+pwm2.start(0)
 
 # Open pipe
 fifo = 'fifo1'
