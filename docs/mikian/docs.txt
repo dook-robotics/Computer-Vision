@@ -683,3 +683,7 @@ Plans for the week of 8/12/2019
 9:30
   This morning Im going to try and write the script to not have to have that communication
   one master script. We can test this out on monday
+
+8/26/2019
+8:00am
+  going to continue working on the contrast script i started yesterday. Meeting with gio and austin at 9

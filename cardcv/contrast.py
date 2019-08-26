@@ -15,9 +15,10 @@ def limit(c):
 def update(val):
     global blank_image
     global contrast
+    global imgplot
     print(sfreq.val)
     contrast = sfreq.val
-    blank_image = imgProc()
+    imgplot.set_data(imgProc())
     return
 
 def imgProc():
@@ -39,15 +40,15 @@ def imgProc():
 
 blank_image = imgProc()
 # cv2.imwrite("new.jpg", blank_image)
-myobj = cv2.imshow('image', blank_image)
+# cv2.imshow('image', blank_image)
 
 imgplot = plt.imshow(blank_image)
 axcolor = 'lightgoldenrodyellow'
 axfreq = plt.axes([0.25, 0.1, 0.65, 0.03], facecolor=axcolor)
-sfreq = Slider(axfreq, 'Contrast', -255, 255, valinit=0, valstep=10)
+sfreq = Slider(axfreq, 'Contrast', -255, 255, valinit=0, valstep=5)
 sfreq.on_changed(update)
 
 plt.show()
 
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
