@@ -15,7 +15,7 @@
 #   Dook Robotics - https://github.com/dook-robotics
 #
 # Usage:
-#   python Object_detection_picamera.py
+#   python master.py
 #
 # Documentation:
 #   Script to run tf model on the Pi
@@ -23,6 +23,8 @@
 # Todo:
 #   Check depracated: sys.path.append('..')
 #   Add object tracking TrackerMOSSE
+#   Find better sleep number for US sensor
+#   Remove 'flag' variable
 #
 
 # Imports
@@ -99,9 +101,9 @@ def idle():
 
         # Take US Reading
         GPIO.output(TRIG, False)
-        time.sleep(0.1)
+        time.sleep(0.001) # Find better number for this
         GPIO.output(TRIG, True)
-        time.sleep(0.00001)
+        time.sleep(0.00001) # Find better number for this
         GPIO.output(TRIG, False)
 
         # Check whether the ECHO is LOW
@@ -125,7 +127,7 @@ def idle():
 
     # Check whether the distance is within 45 cm range
     # This could be a much better alg, without sleeps...
-    flag = 0
+    flag = 0 # Remove flag?
     if avgDistance < 45:
         USCNT = USCNT + 1
         stop()

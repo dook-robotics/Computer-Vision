@@ -687,3 +687,8 @@ Plans for the week of 8/12/2019
 8/26/2019
 8:00am
   going to continue working on the contrast script i started yesterday. Meeting with gio and austin at 9
+
+3:00pm
+  Got back from class, going to finish resume and start reading git
+  Working on video contrast
+  We decided we only need one script. So thats awesome. Need to update OG script with new code
