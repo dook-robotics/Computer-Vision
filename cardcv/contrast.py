@@ -1,3 +1,29 @@
+## contrast.py ##
+## Change the contrast level in a STILL image interactively ##
+#
+# Authors:
+#   Mikian Musser      - https://github.com/mm909
+#   Eric Becerril-Blas - https://github.com/lordbecerril
+#   Zoyla Orellana     - https://github.com/ZoylaO
+#   Austin Janushan    - https://github.com/Janushan-Austin
+#   Giovanny Vazquez   - https://github.com/giovannyVazquez
+#   Brandon Herrera    -
+#   Ameera Essaqi      -
+#   Esdras Morales     -
+#
+# Organization:
+#   Dook Robotics - https://github.com/dook-robotics
+#
+# Usage:
+#   python contrast.py
+#
+# Documentation:
+#
+#
+# Todo:
+#
+#
+
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
