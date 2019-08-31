@@ -692,3 +692,20 @@ Plans for the week of 8/12/2019
   Got back from class, going to finish resume and start reading git
   Working on video contrast
   We decided we only need one script. So thats awesome. Need to update OG script with new code
+
+8/29/2019
+Things to get done this week?
+  Copy of SD card
+  Get Buster lite installed on an sd card
+  Get tensorflow lite installed on that same sd
+  Ba able to transfer models from normal tf to tf lite
+  Get tensorflow lite to work with models we make on my computer
+  Get field of view of camera
+  Figure out how many pictures and of what angles we need
+  Start taking those pictures
+  Figure out how to start a program in headless mode (ie with start button)
+  Border bounding box
+  Remote control
+  Abstract code out of one file
+  Video feed through ssh
+  Video/monitor using HIDM
