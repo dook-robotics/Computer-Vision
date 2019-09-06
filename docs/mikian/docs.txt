@@ -709,3 +709,7 @@ Things to get done this week?
   Abstract code out of one file
   Video feed through ssh
   Video/monitor using HIDM
+
+9/6/2019
+Creating a new conda env to update tf for tflite on computer -> tf090619
+Creating a new conda env for tflite -> tflite090619
