@@ -713,3 +713,35 @@ Things to get done this week?
 9/6/2019
 Creating a new conda env to update tf for tflite on computer -> tf090619
 Creating a new conda env for tflite -> tflite090619
+
+https://github.com/tensorflow/models/blob/master/research/object_detection/export_tflite_ssd_graph.py
+https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tpu_exporters.md
+https://medium.com/datadriveninvestor/mobile-object-detector-with-tensorflow-lite-9e2c278922d0
+
+// WORKS
+python object_detection/export_tflite_ssd_graph.py --pipeline_config_path C:/tensorflow1/models/research/object_detection/ssd_mobilenet_v2_coco_inference_graph/pipeline.config --trained_checkpoint_prefix C:/tensorflow1/models/research/object_detection/ssd_mobilenet_v2_coco_inference_graph/model.ckpt --output_directory C:/tensorflow1/models/research/object_detection/testTFlite
+
+https://medium.com/tensorflow/training-and-serving-a-realtime-mobile-object-detector-in-30-minutes-with-cloud-tpus-b78971cf1193
+
+
+bazel run -c opt tensorflow/lite/toco:toco -- --input_file=D:/Computer-Vision/ODScripts/conversion/tflite_graph.pb --output_file=D:/Computer-Vision/ODScripts/conversion/detect.tflite --input_shapes=1,300,300,3 --input_arrays=normalized_input_image_tensor --output_arrays='TFLite_Detection_PostProcess','TFLite_Detection_PostProcess:1','TFLite_Detection_PostProcess:2','TFLite_Detection_PostProcess:3'  --inference_type=QUANTIZED_UINT8 --mean_values=128 --std_values=128 --change_concat_input_ranges=false --allow_custom_ops
+
+bazel.exe run -c opt lite/toco:toco -- --input_file=D:/Computer-Vision/ODScripts/conversion/tflite_graph.pb --output_file=D:/Computer-Vision/ODScripts/conversion/detect.tflite --input_shapes=1,300,300,3 --input_arrays=normalized_input_image_tensor --output_arrays='TFLite_Detection_PostProcess','TFLite_Detection_PostProcess:1','TFLite_Detection_PostProcess:2','TFLite_Detection_PostProcess:3'  --inference_type=QUANTIZED_UINT8 --mean_values=128 --std_values=128 --change_concat_input_ranges=false --allow_custom_ops
+
+bazel-0.26.1-windows-x86_64.exe run -c opt lite/toco:toco -- --input_file=D:/Computer-Vision/ODScripts/conversion/tflite_graph.pb --output_file=D:/Computer-Vision/ODScripts/conversion/detect.tflite --input_shapes=1,300,300,3 --input_arrays=normalized_input_image_tensor --output_arrays='TFLite_Detection_PostProcess','TFLite_Detection_PostProcess:1','TFLite_Detection_PostProcess:2','TFLite_Detection_PostProcess:3'  --inference_type=QUANTIZED_UINT8 --mean_values=128 --std_values=128 --change_concat_input_ranges=false --allow_custom_ops
+
+bazel run --config=opt lite/toco:toco -- --input_file=D:/Computer-Vision/ODScripts/conversion/tflite_graph.pb --output_file=D:/Computer-Vision/ODScripts/conversion/detect.tflite --input_shapes=1,300,300,3 --input_arrays=normalized_input_image_tensor --output_arrays='TFLite_Detection_PostProcess','TFLite_Detection_PostProcess:1','TFLite_Detection_PostProcess:2','TFLite_Detection_PostProcess:3' --inference_type=QUANTIZED_UINT8 --mean_values=128 --std_values=128 --change_concat_input_ranges=false --allow_custom_ops
+
+bazel-0.26.1-windows-x86_64.exe run --config=opt lite/toco:toco -- --input_file=D:/Computer-Vision/ODScripts/conversion/tflite_graph.pb --output_file=D:/Computer-Vision/ODScripts/conversion/detect.tflite --input_shapes=1,300,300,3 --input_arrays=normalized_input_image_tensor --output_arrays='TFLite_Detection_PostProcess','TFLite_Detection_PostProcess:1','TFLite_Detection_PostProcess:2','TFLite_Detection_PostProcess:3' --inference_type=QUANTIZED_UINT8 --mean_values=128 --std_values=128 --change_concat_input_ranges=false --allow_custom_ops
+
+bazel-0.26.1-windows-x86_64.exe run --config=opt tensorflow/lite/toco:toco -- --input_file=D:/Computer-Vision/ODScripts/conversion/tflite_graph.pb --output_file=D:/Computer-Vision/ODScripts/conversion/detect.tflite --input_shapes=1,300,300,3 --input_arrays=normalized_input_image_tensor --output_arrays='TFLite_Detection_PostProcess','TFLite_Detection_PostProcess:1','TFLite_Detection_PostProcess:2','TFLite_Detection_PostProcess:3' --inference_type=QUANTIZED_UINT8 --mean_values=128 --std_values=128 --change_concat_input_ranges=false --allow_custom_ops
+
+
+bazel run -c opt tensoflow/lite/toco:toco -- --input_file=D:/Computer-Vision/ODScripts/conversion/tflite_graph.pb --output_file=D:/Computer-Vision/ODScripts/conversion/detect.tflite --input_shapes=1,300,300,3 --input_arrays=normalized_input_image_tensor --output_arrays='TFLite_Detection_PostProcess','TFLite_Detection_PostProcess:1','TFLite_Detection_PostProcess:2','TFLite_Detection_PostProcess:3'  --inference_type=QUANTIZED_UINT8 --mean_values=128 --std_values=128 --change_concat_input_ranges=false --allow_custom_ops
+
+
+bazel run -c opt tensoflow/lite/toco:toco -- --input_file=D:/Computer-Vision/ODScripts/conversion/tflite_graph.pb --output_file=D:/Computer-Vision/ODScripts/conversion/detect.tflite --input_shapes=1,300,300,3 --input_arrays=normalized_input_image_tensor --output_arrays='TFLite_Detection_PostProcess','TFLite_Detection_PostProcess:1','TFLite_Detection_PostProcess:2','TFLite_Detection_PostProcess:3'  --inference_type=QUANTIZED_UINT8 --mean_values=128 --std_values=128 --change_concat_input_ranges=false --allow_custom_ops
+
+tflite_convert --output_file=D:/Computer-Vision/ODScripts/conversion/foo.tflite --saved_model_dir=D:/Computer-Vision/ODScripts/conversion
+
+https://medium.com/datadriveninvestor/mobile-object-detector-with-tensorflow-lite-9e2c278922d0
