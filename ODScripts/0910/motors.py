@@ -35,6 +35,15 @@ pwm2 = GPIO.PWM(PWM2, 100)
 pwm.start(0)
 pwm2.start(0)
 
+def setMotors(pwmval, pwm2val, PWM1val, DIR1val, PWM2val, DIR2val):
+    pwm.ChangeDutyCycle(pwmval) # Left
+    pwm2.ChangeDutyCycle(pwm2val) # Right
+    GPIO.output(PWM1, PWM1val)
+    GPIO.output(DIR1, DIR1val)
+    GPIO.output(PWM2, PWM2val)
+    GPIO.output(DIR2, DIR2val)
+    return
+
 def stop():
     print("Stop")
     pwm.ChangeDutyCycle(0)

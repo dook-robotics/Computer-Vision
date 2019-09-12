@@ -53,6 +53,12 @@ def stopListen():
     return
 atexit.register(stopListen)
 
+def printD(str):
+    global debug
+    if debug:
+        print(str)
+    return
+
 # Relay variables
 relayTimer = time.time()
 relayOn = 0
@@ -81,6 +87,7 @@ started = False
 waiting = False
 auto    = False
 manual  = False
+print("SLEEP")
 
 # Set up camera constants, use smaller resolution for faster frame rates
 IM_WIDTH = 1280
@@ -138,10 +145,10 @@ with detection_graph.as_default():
 image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
 
 # Output tensors are the detection boxes, scores, classes, and num objects detected
-detection_boxes = detection_graph.get_tensor_by_name('detection_boxes:0')
-detection_scores = detection_graph.get_tensor_by_name('detection_scores:0')
+detection_boxes   = detection_graph.get_tensor_by_name('detection_boxes:0')
+detection_scores  = detection_graph.get_tensor_by_name('detection_scores:0')
 detection_classes = detection_graph.get_tensor_by_name('detection_classes:0')
-num_detections = detection_graph.get_tensor_by_name('num_detections:0')
+num_detections    = detection_graph.get_tensor_by_name('num_detections:0')
 
 # Initialize frame rate calculation
 frame_rate_calc = 1
@@ -160,64 +167,69 @@ rawCapture.truncate(0)
 frameCount = 0
 for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
 
+    # Get controller input
     ps4Switch = ps4(j)
     ud, lr = ps4Stick(j)
+
     # Change State
     if ps4Switch != 0 and not started:
         if ps4Switch == 1:
+            print("WAITING")
             started = True
             waiting = True
-            print("Waiting")
     elif ps4Switch != 0:
         if ps4Switch == 1 and not manual and not auto:
+            print("SLEEP")
             started = False
             waiting = False
         elif ps4Switch == 2:
+            print("MANUAL")
             waiting = False
             manual = True
             auto = False
-            print("Turning on MANUAL")
         elif ps4Switch == 3:
+            print("AUTO")
             waiting = False
             manual = False
             auto = True
-            print("Turning on AUTO")
         elif ps4Switch == 4:
+            print("WAITING")
             waiting = True
             manual = False
             auto = False
-            print("WAITING")
         elif ps4Switch == 6 and waiting:
+            print("EXITING")
             started = False
             waiting = False
             manual = False
             auto = False
-            print("Exiting")
             break
 
-    #if ps4Switch != 0 and manual and not waiting and not auto:
-    #    if ps4Switch == 5:
-    #        print("Relay")
-    #        #relay()
-    #    else:
-    #        movement = ps4Stick(j)
-    #        print(movement)
-
+    if ud != 0 || lr != 0 and manual:
+       if ps4Switch == 5:
+           print("Relay")
+           relay()
+       else:
+           print("ud: " + str(ud) + " lr: " + str(lr))
+           return
+    # Check for controller disconnect
     if not controllerCount():
+        if not controllerLost:
+            print("Lost Controller")
         waiting = False
         manual = False
         auto = True
         controllerLost = True
 
+    # Check for controller reconnect
     if controllerLost and controllerCount():
         j = pygame.joystick.Joystick(0)
         j.init()
         controllerLost = False
-    else:
-        print("No controler detected.")
 
     t1 = cv2.getTickCount()
 
+    # Get frame from camera
     frame = np.copy(frame1.array)
     frame.setflags(write=1)
     frame_expanded = np.expand_dims(frame, axis=0)
@@ -228,8 +240,7 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port
             [detection_boxes, detection_scores, detection_classes, num_detections],
             feed_dict={image_tensor: frame_expanded})
 
-    # Draw the results of the detection (aka 'visulaize the results')
-
+        # Draw the results of the detection (aka 'visulaize the results')
         vis_util.visualize_boxes_and_labels_on_image_array(
            frame,
            np.squeeze(boxes),
@@ -241,6 +252,7 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port
            min_score_thresh=THRESHOLD)
 
         detectionCount = 0
+
         # For every box, find the center, draw a dot
         for index, box in enumerate(np.squeeze(boxes)):
            ymin = int((box[0]*IM_HEIGHT))
@@ -255,18 +267,7 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port
         # Get the 'primary' card's x value
         primaryx = int((boxes[0][0][1]*IM_WIDTH + boxes[0][0][3]*IM_WIDTH)/2)
 
-    # Draw the center lines
-    cv2.line(frame, (int(IM_WIDTH/2-wideSpace),0), (int(IM_WIDTH/2-wideSpace),int(IM_HEIGHT)), (0,0,255),5) #left
-    cv2.line(frame, (int(IM_WIDTH/2+wideSpace),0), (int(IM_WIDTH/2+wideSpace),int(IM_HEIGHT)), (0,0,255),5) #right
-
-    elapsedTime = time.time() - relayTimer
-    if elapsedTime > 5 and relayOn:
-        relayTurnOff()
-        LoadCell(hx)
-        relayOn = 0
-
-    # Send instructions
-    if auto:
+        # Send instructions
         if primaryx > int(IM_WIDTH/2+wideSpace) and scores[0][0] >= THRESHOLD:
             right()
             print('R')
@@ -289,6 +290,17 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port
             idle()
             movingForward = False
 
+    # Draw the center lines
+    cv2.line(frame, (int(IM_WIDTH / 2 - wideSpace),0), (int(IM_WIDTH / 2 - wideSpace), int(IM_HEIGHT)), (0, 0, 255), 5) #left
+    cv2.line(frame, (int(IM_WIDTH / 2 + wideSpace),0), (int(IM_WIDTH / 2 + wideSpace), int(IM_HEIGHT)), (0, 0, 255), 5) #right
+
+    # Check to turn off relay
+    elapsedTime = time.time() - relayTimer
+    if elapsedTime > 5 and relayOn:
+        relayTurnOff()
+        LoadCell(hx)
+        relayOn = 0
+
     # Check voltage every 60 frames (once a min)
     if frameCount % 60 == 0:
         voltage()
@@ -298,7 +310,6 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port
     t2 = cv2.getTickCount()
     time1 = (t2 - t1) / freq
     frame_rate_calc = 1 / time1
-    #print("fps:",frame_rate_calc)
 
     # Display frame rate and draw to screen
     cv2.putText(frame, "FPS: {0:.2f}".format(frame_rate_calc), (30,50), font, 1, (255,255,0), 2, cv2.LINE_AA)
