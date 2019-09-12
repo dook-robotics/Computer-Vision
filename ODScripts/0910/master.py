@@ -47,6 +47,30 @@ from motors import *
 from remote import *
 from hardware import *
 
+# Add command line arguments
+parser = argparse.ArgumentParser(
+                                 description = 'Dook Robotics - Object Detection Master Script',
+                                 epilog = "Dook Robotics - https://github.com/dook-robotics"
+                                )
+
+parser.add_argument(
+                               '--debug',
+                     dest    = 'debugCLA',
+                     action  = 'store_true',
+                     default = 'False',
+                     help    = 'Prints out all debug messages.'
+                    )
+
+parser.add_argument(
+                               '--hardware',
+                     choices = ['True', 'False'],
+                     dest    = 'hardwareCLA',
+                     default = 'False',
+                     help    = 'Allows hardware to be called.'
+                    )
+
+args = parser.parse_args()
+
 # Cleanup Function
 def stopListen():
     GPIO.cleanup()
@@ -54,8 +78,8 @@ def stopListen():
 atexit.register(stopListen)
 
 def printD(str):
-    global debug
-    if debug:
+    global args
+    if args.debugCLA:
         print(str)
     return
 
@@ -73,7 +97,7 @@ if controllerCount():
     j.init()
     controllerLost = False
 else:
-    print("pygame.joystick.get_count() returned 0")
+    printD("pygame.joystick.get_count() returned 0")
 
 # Object detection variables
 THRESHOLD = 0.6
@@ -87,7 +111,7 @@ started = False
 waiting = False
 auto    = False
 manual  = False
-print("SLEEP")
+printD("SLEEP")
 
 # Set up camera constants, use smaller resolution for faster frame rates
 IM_WIDTH = 1280
@@ -174,31 +198,31 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port
     # Change State
     if ps4Switch != 0 and not started:
         if ps4Switch == 1:
-            print("WAITING")
+            printD("WAITING")
             started = True
             waiting = True
     elif ps4Switch != 0:
         if ps4Switch == 1 and not manual and not auto:
-            print("SLEEP")
+            printD("SLEEP")
             started = False
             waiting = False
         elif ps4Switch == 2:
-            print("MANUAL")
+            printD("MANUAL")
             waiting = False
             manual = True
             auto = False
         elif ps4Switch == 3:
-            print("AUTO")
+            printD("AUTO")
             waiting = False
             manual = False
             auto = True
         elif ps4Switch == 4:
-            print("WAITING")
+            printD("WAITING")
             waiting = True
             manual = False
             auto = False
         elif ps4Switch == 6 and waiting:
-            print("EXITING")
+            printD("EXITING")
             started = False
             waiting = False
             manual = False
@@ -207,15 +231,15 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port
 
     if ud != 0 || lr != 0 and manual:
        if ps4Switch == 5:
-           print("Relay")
+           printD("Relay")
            relay()
        else:
-           print("ud: " + str(ud) + " lr: " + str(lr))
+           printD("ud: " + str(ud) + " lr: " + str(lr))
            return
     # Check for controller disconnect
     if not controllerCount():
         if not controllerLost:
-            print("Lost Controller")
+            printD("Lost Controller")
         waiting = False
         manual = False
         auto = True
@@ -270,23 +294,23 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port
         # Send instructions
         if primaryx > int(IM_WIDTH/2+wideSpace) and scores[0][0] >= THRESHOLD:
             right()
-            print('R')
+            printD('R')
             movingForward = False
         elif primaryx < int(IM_WIDTH/2-wideSpace) and scores[0][0] >= THRESHOLD:
             left()
-            print('L')
+            printD('L')
             movingForward = False
         elif primaryx > int(IM_WIDTH/2-wideSpace) and primaryx < int(IM_WIDTH/2+wideSpace) and scores[0][0] >= THRESHOLD:
             forward()
-            print('F')
+            printD('F')
             movingForward = True
         elif movingForward:
-            print('Relay & L')
+            printD('Relay & L')
             relayTimer = relay()
             relayOn = 1
             movingForward = False
         else:
-            print('I')
+            printD('I')
             idle()
             movingForward = False
 
