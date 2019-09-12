@@ -7,7 +7,7 @@
 #   Zoyla Orellana     - https://github.com/ZoylaO
 #   Austin Janushan    - https://github.com/Janushan-Austin
 #   Giovanny Vazquez   - https://github.com/giovannyVazquez
-#   Brandon Herrera    -
+#   Brandon Herrera    - herrer10@unlv.nevada.edu
 #   Ameera Essaqi      -
 #   Esdras Morales     -
 #

@@ -21,8 +21,7 @@
 #   Script to run tf model on the Pi
 #
 # Todo:
-#   Check depracated: sys.path.append('..')
-#   Add object tracking TrackerMOSSE
+#   Check Trello board
 #
 
 # Imports
@@ -54,30 +53,21 @@ def stopListen():
     return
 atexit.register(stopListen)
 
-idleBool = True
+# Relay variables
 relayTimer = time.time()
 relayOn = 0
+
+# Init pygame for controller
+pygame.init()
 controllerLost = True
 
-pygame.init()
-
-if checkConnect():
+# Try to connect to controler
+if controllerCount():
     j = pygame.joystick.Joystick(0)
     j.init()
     controllerLost = False
 else:
-    print("No controler detected.")
-
-
-axisUpDown = 4                          # Joystick axis to read for up / down position
-axisUpDownInverted = False              # Set this to True if up and down appear to be swapped
-axisLeftRight = 3                       # Joystick axis to read for left / right position
-axisLeftRightInverted = False           # Set this to True if left and right appear to be swapped
-interval = 0.1                          # Time between keyboard updates in seconds, smaller responds faster but uses more processor time
-moveUp = False
-moveDown = False
-moveLeft = False
-moveRight = False
+    print("pygame.joystick.get_count() returned 0")
 
 # Object detection variables
 THRESHOLD = 0.6
@@ -86,11 +76,11 @@ wideSpace = 200
 # Movement detection (History)
 movingForward = False
 
+# Bools for operation statuses
 started = False
 waiting = False
-auto = False
-manual = False
-
+auto    = False
+manual  = False
 
 # Set up camera constants, use smaller resolution for faster frame rates
 IM_WIDTH = 1280
@@ -171,7 +161,7 @@ frameCount = 0
 for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
 
     ps4Switch = ps4(j)
-    ud, lr = ps4Stick()
+    ud, lr = ps4Stick(j)
     # Change State
     if ps4Switch != 0 and not started:
         if ps4Switch == 1:
@@ -213,13 +203,13 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port
     #        movement = ps4Stick(j)
     #        print(movement)
 
-    if not checkConnect():
+    if not controllerCount():
         waiting = False
         manual = False
         auto = True
         controllerLost = True
 
-    if controllerLost and checkConnect():
+    if controllerLost and controllerCount():
         j = pygame.joystick.Joystick(0)
         j.init()
         controllerLost = False

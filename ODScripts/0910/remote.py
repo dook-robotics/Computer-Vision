@@ -1,4 +1,9 @@
-def ps4():
+axisUpDown = 4                          # Joystick axis to read for up / down position
+axisUpDownInverted = False              # Set this to True if up and down appear to be swapped
+axisLeftRight = 3                       # Joystick axis to read for left / right position
+axisLeftRightInverted = False           # Set this to True if left and right appear to be swapped
+
+def ps4(j):
     # Get the currently pressed keys on the keyboard
     events = pygame.event.get()
     for event in events:
@@ -38,7 +43,7 @@ def ps4():
                 print("Pressed: Right Analog")
     return 0
 
-def ps4Stick():
+def ps4Stick(j):
     # Get the currently pressed keys on the keyboard
     events = pygame.event.get()
     for event in events:
@@ -82,5 +87,5 @@ def ps4Stick():
             return (upDown, leftRight)
     return (0,0)
 
-def checkConnect():
+def controllerCount():
     return pygame.joystick.get_count()
