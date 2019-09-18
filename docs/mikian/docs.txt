@@ -202,7 +202,8 @@ Next steps:
 
   To export the model:
   python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/faster_rcnn_inception_v2_pets.config --trained_checkpoint_prefix training/model.ckpt-XXXX --output_directory inference_graph
-  python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/XXXX.config --trained_checkpoint_prefix training/model.ckpt-XXXX --output_directory XXX_inference_graph
+  python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/ssd_mobilenet_v2_coco.config --trained_checkpoint_prefix training/model.ckpt-29993 --output_directory ssdmnv2_0052_inference_graph
+  python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/XXXX.config --trained_checkpoint_prefix training/model.ckpt-xxx --output_directory XXX_inference_graph
 
   Next up, train one more model test it on another new image. Then hook up the webcam and try it there
 
@@ -759,3 +760,13 @@ activate tf_gpu917
 set PYTHONPATH=C:\tensorflow1\models;C:\tensorflow1\models\research;C:\tensorflow1\models\research\slim
 python train.py --logtostderr --train_dir=training/ --pipeline_config_path=training/ssd_mobilenet_v2_coco.config
 TRAINING POOP MODEL
+
+9/18/2019
+
+To restart training:
+
+edit checkpoint file
+  model_checkpoint_path: "model.ckpt-29993"
+  all_model_checkpoint_paths: "model.ckpt-29993"
+
+have .ckpt-xxx.index .ckpt-xxx.data .ckpt-xxx.meta all there
