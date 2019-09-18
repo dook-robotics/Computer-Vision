@@ -745,3 +745,8 @@ bazel run -c opt tensoflow/lite/toco:toco -- --input_file=D:/Computer-Vision/ODS
 tflite_convert --output_file=D:/Computer-Vision/ODScripts/conversion/foo.tflite --saved_model_dir=D:/Computer-Vision/ODScripts/conversion
 
 https://medium.com/datadriveninvestor/mobile-object-detector-with-tensorflow-lite-9e2c278922d0
+
+9/17/2019
+Training model with poop pictures
+TENSOBOARD:
+  tensorboard --logdir=C:/tensorflow1/models/research/object_detection/training --host localhost --port 8088
