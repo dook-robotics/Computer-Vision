@@ -750,3 +750,12 @@ https://medium.com/datadriveninvestor/mobile-object-detector-with-tensorflow-lit
 Training model with poop pictures
 TENSOBOARD:
   tensorboard --logdir=C:/tensorflow1/models/research/object_detection/training --host localhost --port 8088
+
+New anaconda envs
+
+TRAINING POOP MODEL
+cd C:\tensorflow1\models\research\object_detection
+activate tf_gpu917
+set PYTHONPATH=C:\tensorflow1\models;C:\tensorflow1\models\research;C:\tensorflow1\models\research\slim
+python train.py --logtostderr --train_dir=training/ --pipeline_config_path=training/ssd_mobilenet_v2_coco.config
+TRAINING POOP MODEL
