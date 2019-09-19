@@ -776,3 +776,4 @@ D:\Models\poop\inference_graphs
 EXPORTING TO DIR
 python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/XXX.config --trained_checkpoint_prefix training/model.ckpt-XXX --output_directory D:\Models\poop\inference_graphs\XXX
 python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/faster_rcnn_inception_v2_pets.config --trained_checkpoint_prefix training/model.ckpt-28496 --output_directory D:\Models\poop\inference_graphs\faster_rcnn_inception_v2_pets_v1
+python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/ssd_mobilenet_v2_coco.config --trained_checkpoint_prefix training/model.ckpt-70967 --output_directory D:\Models\poop\inference_graphs\ssd_mobilenet_v2_0037_v2
