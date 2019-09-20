@@ -26,12 +26,13 @@ MODEL_NAME = MODEL_NAMES[0]
 FROZEN_INFERENCE_GRAPH = os.path.join(BASE,MODEL_NAME,'frozen_inference_graph.pb').replace("\\","/")
 
 # Image Directories
+PATH_TO_TRAIN_IMAGES = "D:/Database/reduced/train/*.jpg"
 PATH_TO_TEST_IMAGES  = "D:/Database/reduced/test/*.jpg"
 OUTPUT               = "D:/Database/tests/*"
 NUM_CLASSES          = 1
 
 # Grab all images
-IMAGES = glob.glob(PATH_TO_TEST_IMAGES)
+IMAGES = glob.glob(PATH_TO_TRAIN_IMAGES) + glob.glob(PATH_TO_TEST_IMAGES)
 
 # Clean output folder
 OUTPUT_FILES = glob.glob(OUTPUT)
