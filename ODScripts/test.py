@@ -7,14 +7,16 @@ import tensorflow as tf
 from utils import label_map_util
 from utils import visualization_utils as vis_util
 
-MODEL_NAME = "ssd_mobilenet_v2_0037_v3"
+MODEL_NAME = "ssd_mobilenet_v2_v4"
 
 BASE = "D:/Models/poop/inference_graphs"
 PATH_TO_LABELS = "D:/Models/poop/labelmap.pbtxt"
 FROZEN_INFERENCE_GRAPH = os.path.join(BASE,MODEL_NAME,'frozen_inference_graph.pb').replace("\\","/")
-PATH_TO_IMAGES = "D:/Database/reduced/test/*.jpg"
+PATH_TO_IMAGES = "D:/Database/reduced/train/*.jpg"
+PATH_TO_IMAGEST = "D:/Database/reduced/test/*.jpg"
 PATH_TO_TESTS = "D:/Database/tests/*"
 IMAGES = glob.glob(PATH_TO_IMAGES)
+IMAGES = IMAGES + glob.glob(PATH_TO_IMAGEST)
 NUM_CLASSES = 1
 
 filelist = glob.glob(PATH_TO_TESTS)
@@ -61,7 +63,7 @@ for image in IMAGES:
         category_index,
         use_normalized_coordinates=True,
         line_thickness=8,
-        min_score_thresh=0.5)
+        min_score_thresh=0.25)
 
     cv2.imwrite('D:/Database/tests/test' + name, image)
     print("Processed:", name)
