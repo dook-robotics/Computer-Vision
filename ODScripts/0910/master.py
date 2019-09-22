@@ -229,7 +229,7 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port
             auto = False
             break
 
-    if ud != 0 || lr != 0 and manual:
+    if ud != 0 or lr != 0 and manual:
        if ps4Switch == 5:
            printD("Relay")
            relay()
