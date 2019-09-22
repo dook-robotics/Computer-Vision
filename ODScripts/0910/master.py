@@ -7,9 +7,9 @@
 #   Zoyla Orellana     - https://github.com/ZoylaO
 #   Austin Janushan    - https://github.com/Janushan-Austin
 #   Giovanny Vazquez   - https://github.com/giovannyVazquez
-#   Brandon Herrera    -
-#   Ameera Essaqi      -
-#   Esdras Morales     -
+#   Ameera Essaqi      - https://github.com/AmeeraE
+#   Brandon Herrera    - herrer10@unlv.nevada.edu
+#   Esdras Morales     - morale2@unlv.nevada.edu
 #
 # Organization:
 #   Dook Robotics - https://github.com/dook-robotics
