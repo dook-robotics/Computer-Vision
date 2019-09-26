@@ -283,7 +283,7 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port
            xmin = int((box[1]*IM_WIDTH))
            ymax = int((box[2]*IM_HEIGHT))
            xmax = int((box[3]*IM_WIDTH))
-           Result = np.array(frame[ymin:ymax,xmin:xmax])
+           # Result = np.array(frame[ymin:ymax,xmin:xmax])
            if(scores[0][index] >= THRESHOLD):
                detectionCount = detectionCount + 1
                cv2.circle(frame,(int((xmin + xmax)/2),int((ymin + ymax)/2)),5,(0,255,0),-1)
