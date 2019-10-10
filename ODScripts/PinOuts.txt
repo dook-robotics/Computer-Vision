@@ -1,0 +1,16 @@
+# Motor Pins
+PWM1=17
+DIR1=22
+PWM2=23
+DIR2=24
+
+# US Pins
+TRIG = 18
+ECHO = 27
+
+# Relay Pin
+RELAIS_1_GPIO = 25
+
+#LoadCell
+DT= 5
+SCK =6
