@@ -192,7 +192,25 @@ rawCapture.truncate(0)
 
 # For each frame
 frameCount = 0
+t1 = cv2.getTickCount()
+averageFPS = 0.0
+sumFPS = 0.0
+
 for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
+    # Check voltage every 60 frames (once a min)
+    if frameCount % 60 == 0:
+        voltage()
+    frameCount = frameCount + 1
+
+    # Calc Frame Rate
+    t2 = cv2.getTickCount()
+    time1 = (t2 - t1) / freq
+    frame_rate_calc = 1 / time1
+
+    #Calc average FPS
+    sumFPS = sumFPS + frame_rate_calc
+    averageFPS = sumFPS/frameCount;
+
 
     # Get controller input
     if not controllerLost:
@@ -240,7 +258,7 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port
            else:
                printD("ud: " + str(ud) + " lr: " + str(lr))
                continue
-               
+
     # Check for controller disconnect
     if not controllerCount():
         if not controllerLost:
@@ -330,18 +348,10 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port
         LoadCell(hx)
         relayOn = 0
 
-    # Check voltage every 60 frames (once a min)
-    if frameCount % 60 == 0:
-        voltage()
-    frameCount = frameCount + 1
-
-    # Calc Frame Rate
-    t2 = cv2.getTickCount()
-    time1 = (t2 - t1) / freq
-    frame_rate_calc = 1 / time1
-
     # Display frame rate and draw to screen
     cv2.putText(frame, "FPS: {0:.2f}".format(frame_rate_calc), (30,50), font, 1, (255,255,0), 2, cv2.LINE_AA)
+    cv2.putText(frame, "Average FPS: {0:.2f}".format(averageFPS), (30,150), font, 1, (255,255,0), 2, cv2.LINE_AA)
+
     cv2.imshow('Object detector', frame)
 
     # Press 'q' to quit
