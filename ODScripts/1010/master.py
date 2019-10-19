@@ -314,28 +314,30 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port
         # Get the 'primary' card's x value
         primaryx = int((boxes[0][0][1]*IM_WIDTH + boxes[0][0][3]*IM_WIDTH)/2)
 
-        # Send instructions
-        if primaryx > int(IM_WIDTH/2+wideSpace) and scores[0][0] >= THRESHOLD:
-            right()
-            printD('R')
-            movingForward = False
-        elif primaryx < int(IM_WIDTH/2-wideSpace) and scores[0][0] >= THRESHOLD:
-            left()
-            printD('L')
-            movingForward = False
-        elif primaryx > int(IM_WIDTH/2-wideSpace) and primaryx < int(IM_WIDTH/2+wideSpace) and scores[0][0] >= THRESHOLD:
-            forward()
-            printD('F')
-            movingForward = True
-        elif movingForward:
-            printD('Relay & L')
-            relayTimer = relay()
-            relayOn = 1
-            movingForward = False
-        else:
-            printD('I')
-            idle()
-            movingForward = False
+        #stops object detection from moving if we are currently picking up poop
+        if not relayOn:
+            # Send instructions
+            if primaryx > int(IM_WIDTH/2+wideSpace) and scores[0][0] >= THRESHOLD:
+                right()
+                printD('R')
+                movingForward = False
+            elif primaryx < int(IM_WIDTH/2-wideSpace) and scores[0][0] >= THRESHOLD:
+                left()
+                printD('L')
+                movingForward = False
+            elif primaryx > int(IM_WIDTH/2-wideSpace) and primaryx < int(IM_WIDTH/2+wideSpace) and scores[0][0] >= THRESHOLD:
+                forward()
+                printD('F')
+                movingForward = True
+            elif movingForward:
+                printD('Relay & L')
+                relayTimer = relay()
+                relayOn = 1
+                movingForward = False
+            else:
+                printD('I')
+                idle()
+                movingForward = False
 
     # Draw the center lines
     cv2.line(frame, (int(IM_WIDTH / 2 - wideSpace),0), (int(IM_WIDTH / 2 - wideSpace), int(IM_HEIGHT)), (0, 0, 255), 5) #left
