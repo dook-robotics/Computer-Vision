@@ -44,7 +44,11 @@ def LoadCell(hx):
 
 def voltage():
     print("Voltage Check")
-    print("chan0 value: {:>5}\t chan0.voltage: {:>5.3f}".format(chan0.value, chan0.voltage))
+    motor1Current = (chan1.voltage - 2.5)*10
+    motor2Current = (chan2.voltage -2.5)*10
+    print("chan0 value: {:>5}\t chan0 voltage: {:>5.3f}".format(chan0.value, chan0.voltage))
+    # print("chan1 value: {:>5}\t chan1 current: {:>5.3f}".format(chan0.value, motor1Current))
+    # print("chan2 value: {:>5}\t chan2 voltage: {:>5.3f}".format(chan0.value, motor2Current))
     return
 
 def LoadCellInit():
