@@ -1,9 +1,23 @@
 import time
 import RPi.GPIO as GPIO
+import board
+import busio
+import adafruit_ads1x15.ads1115 as ads1115
+from adafruit_ads1x15.analog_in import AnalogIn
 from hx711 import HX711
 
 # Relay Pin
 RELAIS_1_GPIO = 25
+
+#setup for voltage senosr
+#I2C BUS0
+i2c = busio.I2C(board.SCL, board.SDA)
+ads = ADS.ads1115(i2c)
+chan0 = AnalogIn(ads, ADS.p0)# Pin for pi
+#chan1 = AnalogIn(ads, ADS.p1) #pins for motors: motor 1
+#chan2 = AnalogIn(ads, ADS.p2) #pins for motors: motor 2
+
+
 
 def relay():
     print("Relay On")
@@ -30,6 +44,7 @@ def LoadCell(hx):
 
 def voltage():
     print("Voltage Check")
+    print("chan0 value: {:>5}\t chan0.voltage: {:>5.3f}".format(chan0.value, chan0.voltage))
     return
 
 def LoadCellInit():
