@@ -43,7 +43,7 @@ from picamera.array import PiRGBArray
 from utils import visualization_utils as vis_util
 
 # Imports from local files
-from motors import *
+#from motors import *
 from remote import *
 from hardware import *
 
@@ -254,7 +254,7 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port
         if ud != 0 or lr != 0 and manual:
            if ps4Switch == 5:
                printD("Relay")
-               relay()
+               #relay()
            else:
                printD("ud: " + str(ud) + " lr: " + str(lr))
                continue
@@ -318,25 +318,25 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port
         if not relayOn:
             # Send instructions
             if primaryx > int(IM_WIDTH/2+wideSpace) and scores[0][0] >= THRESHOLD:
-                right()
+                #right()
                 printD('R')
                 movingForward = False
             elif primaryx < int(IM_WIDTH/2-wideSpace) and scores[0][0] >= THRESHOLD:
-                left()
+                #left()
                 printD('L')
                 movingForward = False
             elif primaryx > int(IM_WIDTH/2-wideSpace) and primaryx < int(IM_WIDTH/2+wideSpace) and scores[0][0] >= THRESHOLD:
-                forward()
+                #forward()
                 printD('F')
                 movingForward = True
             elif movingForward:
                 printD('Relay & L')
-                relayTimer = relay()
-                relayOn = 1
+                #relayTimer = relay()
+                #relayOn = 1
                 movingForward = False
             else:
                 printD('I')
-                idle()
+                #idle()
                 movingForward = False
 
     # Draw the center lines
@@ -346,8 +346,8 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port
     # Check to turn off relay
     elapsedTime = time.time() - relayTimer
     if elapsedTime > 5 and relayOn:
-        relayTurnOff()
-        LoadCell(hx)
+        #relayTurnOff()
+        #LoadCell(hx)
         relayOn = 0
 
     # Display frame rate and draw to screen
