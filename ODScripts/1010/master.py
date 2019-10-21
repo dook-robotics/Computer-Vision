@@ -206,6 +206,7 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port
     t2 = cv2.getTickCount()
     time1 = (t2 - t1) / freq
     frame_rate_calc = 1 / time1
+    t1 = t2
 
     #Calc average FPS
     sumFPS = sumFPS + frame_rate_calc
@@ -274,7 +275,7 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port
         j.init()
         controllerLost = False
 
-    t1 = cv2.getTickCount()
+    #t1 = cv2.getTickCount()
 
     # Get frame from camera
     frame = np.copy(frame1.array)
