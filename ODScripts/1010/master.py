@@ -79,7 +79,7 @@ atexit.register(stopListen)
 
 def printD(str):
     global args
-    if args.debugCLA:
+    if args.debugCLA != "False":
         print(str)
     return
 
@@ -255,7 +255,7 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port
         if ud != 0 or lr != 0 and manual:
            if ps4Switch == 5:
                printD("Relay")
-               #relay()
+               relay()
            else:
                printD("ud: " + str(ud) + " lr: " + str(lr))
                continue
@@ -274,8 +274,6 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port
         j = pygame.joystick.Joystick(0)
         j.init()
         controllerLost = False
-
-    #t1 = cv2.getTickCount()
 
     # Get frame from camera
     frame = np.copy(frame1.array)
@@ -319,25 +317,25 @@ for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port
         if not relayOn:
             # Send instructions
             if primaryx > int(IM_WIDTH/2+wideSpace) and scores[0][0] >= THRESHOLD:
-                #right()
+                right()
                 printD('R')
                 movingForward = False
             elif primaryx < int(IM_WIDTH/2-wideSpace) and scores[0][0] >= THRESHOLD:
-                #left()
+                left()
                 printD('L')
                 movingForward = False
             elif primaryx > int(IM_WIDTH/2-wideSpace) and primaryx < int(IM_WIDTH/2+wideSpace) and scores[0][0] >= THRESHOLD:
-                #forward()
+                forward()
                 printD('F')
                 movingForward = True
             elif movingForward:
                 printD('Relay & L')
-                #relayTimer = relay()
-                #relayOn = 1
+                relayTimer = relay()
+                relayOn = 1
                 movingForward = False
             else:
                 printD('I')
-                #idle()
+                idle()
                 movingForward = False
 
     # Draw the center lines
