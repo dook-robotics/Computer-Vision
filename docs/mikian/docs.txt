@@ -767,7 +767,7 @@ TRAINING POOP MODEL
 
 To restart training:
 
-edit checkpoint file
+edit checkpoint file CANNOT HAVE TENSORBOARD RUNNING
   model_checkpoint_path: "model.ckpt-29993"
   all_model_checkpoint_paths: "model.ckpt-29993"
 
@@ -798,7 +798,15 @@ python export_inference_graph.py --input_type image_tensor --pipeline_config_pat
 python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/ssd_mobilenet_v2_coco.config --trained_checkpoint_prefix training/model.ckpt-25143 --output_directory D:\Models\poop\inference_graphs\ssd_mobilenet_v2.4.1
 python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/ssd_mobilenet_v2_coco.config --trained_checkpoint_prefix training/model.ckpt-18612 --output_directory D:\Models\poop\inference_graphs\ssd_mobilenet_v2.4.2
 python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/ssd_mobilenet_v2_coco.config --trained_checkpoint_prefix training/model.ckpt-29240 --output_directory D:\Models\poop\inference_graphs\ssd_mobilenet_v2.4.3
-python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/ssd_mobilenet_v2_coco.config --trained_checkpoint_prefix training/model.ckpt-36471 --output_directory D:\Models\poop\inference_graphs\ssd_mobilenet_v2.4.4
+python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/ssd_mobilenet_v2_coco.config --trained_checkpoint_prefix training/model.ckpt-45486 --output_directory D:\Models\poop\inference_graphs\ssd_mobilenet_v2.4.5
+python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/ssd_mobilenet_v2_coco.config --trained_checkpoint_prefix training/model.ckpt-27619 --output_directory D:\Models\poop\inference_graphs\ssd_mobilenet_v2.5.0
+python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/ssd_mobilenet_v2_coco.config --trained_checkpoint_prefix training/model.ckpt-1922 --output_directory D:\Models\poop\inference_graphs\ssd_mobilenet_v2.5.1
+python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/ssd_mobilenet_v2_coco.config --trained_checkpoint_prefix training/model.ckpt-3861 --output_directory D:\Models\poop\inference_graphs\ssd_mobilenet_v2.5.2
+python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/ssd_mobilenet_v2_coco.config --trained_checkpoint_prefix training/model.ckpt-5776 --output_directory D:\Models\poop\inference_graphs\ssd_mobilenet_v2.5.3 | Overwriten 2.5.4
+python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/ssd_mobilenet_v2_coco.config --trained_checkpoint_prefix training/model.ckpt-10325 --output_directory D:\Models\poop\inference_graphs\ssd_mobilenet_v2.5.4
+python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/ssd_mobilenet_v2_coco.config --trained_checkpoint_prefix training/model.ckpt-8278 --output_directory D:\Models\poop\inference_graphs\ssd_mobilenet_v2.5.5
+python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/ssd_mobilenet_v2_coco.config --trained_checkpoint_prefix training/model.ckpt-10820 --output_directory D:\Models\poop\inference_graphs\ssd_mobilenet_v2.5.6
+python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/ssd_mobilenet_v2_coco.config --trained_checkpoint_prefix training/model.ckpt-14886 --output_directory D:\Models\poop\inference_graphs\ssd_mobilenet_v2.5.7
 
 tflite_convert --output_file=/home/wang/Downloads/deeplabv3_mnv2_pascal_train_aug/optimized_graph.tflite --graph_def_file=/home/wang/Downloads/deeplabv3_mnv2_pascal_train_aug/frozen_inference_graph.pb --inference_type=FLOAT --inference_input_type=QUANTIZED_UINT8 --input_arrays=ImageTensor --input_shapes=1,513,513,3 --output_arrays=SemanticPredictions –allow_custom_op
 
