@@ -56,7 +56,7 @@ GPIO.setup(TRIG_R,GPIO.OUT)
 GPIO.setup(ECHO_R,GPIO.IN)
 
 # Set frequency of PWM
-pwm = GPIO.PWM(PWM1, 750)
+pwm  = GPIO.PWM(PWM1, 750)
 pwm2 = GPIO.PWM(PWM2, 750)
 
 # Initialize
@@ -83,7 +83,7 @@ def manMotors(ud, lr):
     ud *= scale
     lr *= scale
     hyp = normhyp
-    ud = abs(ud)
+    ud  = abs(ud)
 
     powerR = 0
     powerL = 0
@@ -118,14 +118,24 @@ def manMotors(ud, lr):
 def setMotors(pwmval, pwm2val, PWM1val, DIR1val, PWM2val, DIR2val):
     pwm.ChangeDutyCycle(pwmval)   # Left
     pwm2.ChangeDutyCycle(pwm2val) # Right
-    GPIO.output(PWM1, GPIO.HIGH)  # DIR1val)
-    GPIO.output(PWM2, GPIO.HIGH)  # DIR2val)
+    GPIO.output(PWM1, GPIO.HIGH)
+    GPIO.output(PWM2, GPIO.HIGH)
     GPIO.output(DIR1, DIR1val)
     GPIO.output(DIR2, DIR2val)
     return
 
 # This function needs to be changed to non blocking
-def runMotors(seconds): 
+def runMotorsNonBlocking():
+    startTime = time.time()
+    pwm.ChangeDutyCycle(AutoPower)
+    pwm2.ChangeDutyCycle(AutoPower)
+    GPIO.output(PWM1,GPIO.HIGH)
+    GPIO.output(DIR1,GPIO.LOW)
+    GPIO.output(PWM2,GPIO.HIGH)
+    GPIO.output(DIR2,GPIO.HIGH)
+    return startTime
+
+def runMotors(seconds):
     print("Running motors for " + str(seconds) + " seconds.")
     startTime = time.time();
     elapsedTime = time.time() - startTime
