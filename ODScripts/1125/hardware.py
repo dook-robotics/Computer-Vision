@@ -92,7 +92,7 @@ def voltage():
     #print("chan0 value: {:>5}\t chan0 voltage: {:>5.3f}\t Battery voltage: {:>5.3f}".format(chan0.value, chan0.voltage, batteryVoltage))
     #print("chan1 value: {:>5}\t chan1 current: {:>5.3f}".format(chan1.value, motor1Current))
     #print("chan2 value: {:>5}\t chan2 voltage: {:>5.3f}".format(chan2.value, motor2Current))
-    return batteryVoltage, motor1Current, motor2Current
+    return batteryVoltage, motor1Current, motor2Current, time.time()
 
 def LoadCellInit():
     hx = HX711(5, 6)
@@ -105,4 +105,3 @@ def LoadCellInit():
 
 #hx = LoadCellInit()
 #LoadCell(hx)
-

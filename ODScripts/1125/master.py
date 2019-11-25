@@ -38,17 +38,18 @@ from motors import *
 from remote import *
 from hardware import *
 
+# Clear imports
+os.system("clear")
+
+print("\n ===================================")
+print(" ========== Dook Robotics ==========")
+print(" ==========  Version 1.0  ==========")
+print(" ===================================\n")
+
 # This defines where our database is online
 #firebase = firebase.FirebaseApplication('https://dook-726e9.firebaseio.com/')
 
-# Clear imports
-os.system("clear")
-print("\n ===================================")
-print(" ========== Dook Robotics ==========")
-print(" ==========  Version 0.1  ==========")
-print(" ===================================\n")
-
-# Add command line arguments
+# ---------- Add command line arguments ----------
 parser = argparse.ArgumentParser(
                                  description = 'Dook Robotics - Object Detection Master Script',
                                  epilog = "Dook Robotics - https://github.com/dook-robotics"
@@ -58,19 +59,23 @@ parser.add_argument(
                                '--debug',
                      dest    = 'debugCLA',
                      action  = 'store_true',
-                     default = 'False',
+                     default = False,
                      help    = 'Prints out all debug messages.'
                     )
 
 parser.add_argument(
-                               '--hardware',
-                     choices = ['True', 'False'],
+                               '--hardwareOff',
                      dest    = 'hardwareCLA',
-                     default = 'False',
+                     action  = 'store_true',
+                     default = False,
                      help    = 'Allows hardware to be called.'
                     )
 
 args = parser.parse_args()
+
+def dprint(message):
+    if args.debugCLA:
+        print(message)
 
 # Cleanup Function
 def stopListen():
@@ -98,9 +103,9 @@ else:
     print("pygame.joystick.get_count() returned 0")
 
 # Object detection variables
-THRESHOLD = 0.3
+THRESHOLD     = 0.3
 ROPETHRESHOLD = 0.6
-wideSpace = 25
+wideSpace     = 25
 
 # Movement detection (History)
 movingForward = False
@@ -116,15 +121,45 @@ print("Starting in SLEEP state")
 stop()
 
 # Set up camera constants, use smaller resolution for faster frame rates
-IM_WIDTH  = 889 #1200
-IM_HEIGHT = 500 #720
+IM_WIDTH  = 889 #1200 #300
+IM_HEIGHT = 500 #720 #300
 
 # Default camera is picam
 camera_type = 'picamera'
 
 # File containing the model to use
 ################################ CHANGE ################################
-MODEL_NAME = 'ssd_mobilenet_v2.5.5'
+
+                # ==== Total - v2.1.0 - 0.50 ====
+                # Detections               : 748
+                # Total False Detections   : 0
+                # Successful Detections    : 748
+                # Total objects            : 767
+                # True Accuracy            : 0.98
+                # Effective Accuracy       : 0.98
+                # ===============================
+# MODEL_NAME = 'ssd_mobilenet_v2.1.0' # Poop
+
+                # ===== SSD - v2.2.5 - 0.25 =====
+                # Detections               : 1359
+                # Total False Detections   : 18
+                # Successful Detections    : 1341
+                # Total objects            : 1365
+                # True Accuracy            : 0.98
+                # Effective Accuracy       : 0.97
+                # ========== Data - v2 ==========
+# MODEL_NAME = 'ssd_mobilenet_v2.2.5' # Poop and rocks
+
+                # ===== SSD - v2.5.5 - 0.30 =====
+                # Detections               : 2368
+                # Total False Detections   : 119
+                # Successful Detections    : 2249
+                # Total objects            : 2349
+                # True Accuracy            : 0.96
+                # Effective Accuracy       : 0.91
+                # ====== Data - All Images ======
+MODEL_NAME = 'ssd_mobilenet_v2.5.5' # Poop and rope
+
 ################################ CHANGE ################################
 
 # Get file paths
@@ -133,13 +168,17 @@ PATH_TO_CKPT = os.path.join(CWD_PATH,MODEL_NAME, 'frozen_inference_graph.pb')
 
 # Path to label map file
 ################################ CHANGE ################################
+# PATH_TO_LABELS = os.path.join(CWD_PATH, 'data', 'poop.pbtxt')
 PATH_TO_LABELS = os.path.join(CWD_PATH, 'data', 'ropePoop.pbtxt')
 ################################ CHANGE ################################
 
 # Number of classes the object detector can identify
 ################################ CHANGE ################################
+# NUM_CLASSES = 1
 NUM_CLASSES = 2
 ################################ CHANGE ################################
+
+''' Start building tensorflow '''
 
 # Load labels.
 label_map      = label_map_util.load_labelmap(PATH_TO_LABELS)
@@ -165,6 +204,8 @@ detection_scores  = detection_graph.get_tensor_by_name('detection_scores:0' )
 detection_classes = detection_graph.get_tensor_by_name('detection_classes:0')
 num_detections    = detection_graph.get_tensor_by_name(  'num_detections:0' )
 
+''' Finish building tensorflow '''
+
 # Initialize frame rate calculation
 frame_rate_calc = 1
 freq = cv2.getTickFrequency()
@@ -172,7 +213,6 @@ font = cv2.FONT_HERSHEY_SIMPLEX
 
 # Initialize Picamera and grab reference to the raw capture
 camera = PiCamera()
-# camera.color_effects = (128,128)
 camera.resolution = (IM_WIDTH,IM_HEIGHT)
 camera.framerate  = 3
 rawCapture        = PiRGBArray(camera, size = (IM_WIDTH,IM_HEIGHT))
@@ -191,13 +231,43 @@ forwardTime   = 4
 ud = 0
 lr = 0
 
+lowVoltage    = 31
+exitVoltage   = 30
+voltageStatus = 1
+voltageHistoryFile = open("voltageHistory.txt", "a")
+value = datetime.datetime.fromtimestamp(time.time())
+voltageHistoryFile.write("\n========== " + value.strftime('%Y-%m-%d %H:%M:%S') + " ==========\n\n")
+v, m1, m2, voltageTime = voltage()
+value = datetime.datetime.fromtimestamp(time.time())
+voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Battery): " + str(v) + "v\n")
+voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + "  (Motor1): " + str(m1) + "v\n")
+voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + "  (Motor2): " + str(m2) + "v\n")
+voltageHistoryFile.write("\n")
+
+weightFile = open('weight.txt', 'r')
+txt = file_handle.readlines()
+lcWeight = int(txt[0])
+weightFile.close()
+
 for frame1 in camera.capture_continuous(rawCapture, format = "bgr", use_video_port = True):
     # Check voltage every 60 frames (once a min)
-    if frameCount % 60 == 0:
-        v, m1, m2 = voltage()
-        print("Battery: " + str(v)  + "v")
-        print("Motor1 : " + str(m1) + "v")
-        print("Motor2 : " + str(m2) + "v")
+    # if frameCount % 5 == 0:
+    if time.time() - voltageTime > 1:
+        v, m1, m2, voltageTime = voltage()
+        if v < exitVoltage:
+            voltageStatus = -1
+        elif v < lowVoltage:
+            voltageStatus = 0
+        else:
+            voltageStatus = 1
+        # print("Battery: " + str(v)  + "v")
+        # print("Motor1 : " + str(m1) + "v")
+        # print("Motor2 : " + str(m2) + "v")
+        value = datetime.datetime.fromtimestamp(time.time())
+        voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Battery): " + str(v) + "v\n")
+        voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + "  (Motor1): " + str(m1) + "v\n")
+        voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + "  (Motor2): " + str(m2) + "v\n")
+        voltageHistoryFile.write("\n")
         #result = firebase.post('https://dook-726e9.firebaseio.com/',{'motor1':m1})
         #if result['name'] == '':
         #    print("bad")
@@ -207,6 +277,19 @@ for frame1 in camera.capture_continuous(rawCapture, format = "bgr", use_video_po
         #result = firebase.post('https://dook-726e9.firebaseio.com/',{'voltage':v})
         #if result['name'] == '':
         #    print("bad")
+
+    if voltageStatus == lowVoltage:
+        print("WARNING: Low Voltage" + str(v))
+        voltageHistoryFile.write("WARNING: Low Voltage" + str(v) + "\n")
+    if voltageStatus == exitVoltage:
+        print("CRITICAL: Voltage too low " + str(v))
+        voltageHistoryFile.write("CRITICAL: Voltage too low " + str(v) + "\n")
+        voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Battery): " + str(v) + "v\n")
+        voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + "  (Motor1): " + str(m1) + "v\n")
+        voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + "  (Motor2): " + str(m2) + "v\n")
+        voltageHistoryFile.write("\n")
+        print("Exiting now.")
+        exit()
 
     frameCount = frameCount + 1
 
@@ -227,8 +310,6 @@ for frame1 in camera.capture_continuous(rawCapture, format = "bgr", use_video_po
             ud = ps4Stick[1]
         if 0 in ps4Stick:
             lr = ps4Stick[0]
-
-        #print("ud: " + str(ud) + " lr: " + str(lr))
 
         # Change State
         if ps4Switch != 0 and not started:
@@ -301,13 +382,6 @@ for frame1 in camera.capture_continuous(rawCapture, format = "bgr", use_video_po
         auto           = True
         controllerLost = True
 
-    # Check for controller reconnect
-    if controllerLost and controllerCount():
-        print("reconnecting")
-        j = pygame.joystick.Joystick(0)
-        j.init()
-        controllerLost = False
-
     t1 = cv2.getTickCount()
 
     # Get frame from camera
@@ -340,6 +414,8 @@ for frame1 in camera.capture_continuous(rawCapture, format = "bgr", use_video_po
         for index, box in enumerate(np.squeeze(boxes)):
            poopDetection = False
            ropeDetection = False
+           if scores[0][index] < THRESHOLD:
+               break
            if np.squeeze(classes)[index] == 1:
                poopDetection = scores[0][index] >= THRESHOLD
            if np.squeeze(classes)[index] == 2:
@@ -403,8 +479,11 @@ for frame1 in camera.capture_continuous(rawCapture, format = "bgr", use_video_po
     if elapsedTime > 20 and relayOn:
         relayTurnOff()
         relayOn = 0
-        #lc = LoadCell(hx)
-    	#result = firebase.post('https://dook-726e9.firebaseio.com/',{'loadSensor':int(lc)})
+        # lcWeight = LoadCell(hx)
+        # weightFile = open("weight.txt","w+")
+        # weightFile.write(str(lcWeight))
+        # weightFile.close()
+    	#result = firebase.post('https://dook-726e9.firebaseio.com/',{'loadSensor':int(lcWeight)})
     	#if result > 299:
     	#	print ("bad)
 
