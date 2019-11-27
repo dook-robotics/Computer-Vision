@@ -23,6 +23,7 @@ import errno
 import pygame
 import atexit
 import argparse
+import datetime
 import numpy as np
 import tensorflow as tf
 import RPi.GPIO as GPIO
@@ -38,13 +39,6 @@ from motors import *
 from remote import *
 from hardware import *
 
-# Clear imports
-os.system("clear")
-
-print("\n ===================================")
-print(" ========== Dook Robotics ==========")
-print(" ==========  Version 1.0  ==========")
-print(" ===================================\n")
 
 # This defines where our database is online
 #firebase = firebase.FirebaseApplication('https://dook-726e9.firebaseio.com/')
@@ -71,7 +65,23 @@ parser.add_argument(
                      help    = 'Allows hardware to be called.'
                     )
 
+parser.add_argument(
+                               '--battery',
+                     dest    = 'batteryNumCLA',
+                     required = True,
+                     help    = 'Battery number.'
+                    )
+
 args = parser.parse_args()
+
+# Clear imports
+os.system("clear")
+
+print("\n ===================================")
+print(" ========== Dook Robotics ==========")
+print(" ==========  Version 1.0  ==========")
+print(" ===================================\n")
+
 
 def dprint(message):
     if args.debugCLA:
@@ -239,9 +249,9 @@ value = datetime.datetime.fromtimestamp(time.time())
 voltageHistoryFile.write("\n========== " + value.strftime('%Y-%m-%d %H:%M:%S') + " ==========\n\n")
 v, m1, m2, voltageTime = voltage()
 value = datetime.datetime.fromtimestamp(time.time())
-voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Battery): " + str(v) + "v\n")
-voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + "  (Motor1): " + str(m1) + "v\n")
-voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + "  (Motor2): " + str(m2) + "v\n")
+voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Battery: " + args.batteryNumCLA + ") | " + str(v) + "v\n")
+voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Motor1)     | " + str(m1) + "v\n")
+voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Motor2)     | " + str(m2) + "v\n")
 voltageHistoryFile.write("\n")
 
 weightFile = open('weight.txt', 'r')
@@ -264,9 +274,9 @@ for frame1 in camera.capture_continuous(rawCapture, format = "bgr", use_video_po
         # print("Motor1 : " + str(m1) + "v")
         # print("Motor2 : " + str(m2) + "v")
         value = datetime.datetime.fromtimestamp(time.time())
-        voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Battery): " + str(v) + "v\n")
-        voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + "  (Motor1): " + str(m1) + "v\n")
-        voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + "  (Motor2): " + str(m2) + "v\n")
+        voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Battery: " + args.batteryNumCLA + ") | " + str(v) + "v\n")
+        voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Motor1)     | " + str(m1) + "v\n")
+        voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Motor2)     | " + str(m2) + "v\n")
         voltageHistoryFile.write("\n")
         #result = firebase.post('https://dook-726e9.firebaseio.com/',{'motor1':m1})
         #if result['name'] == '':
