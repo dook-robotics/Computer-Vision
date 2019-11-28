@@ -33,19 +33,31 @@ parser.add_argument(
                      help    = 'Battery number.'
                     )
 
+parser.add_argument(
+                               '--newBattery',
+                     dest    = 'newBatteryCLA',
+                     action  = 'store_true',
+                     default = False,
+                     help    = 'If battery is recharged.'
+                    )
+
 args = parser.parse_args()
 
-voltageHistoryFile = open("voltageHistory.txt", "a")
+voltageHistoryFile = open("voltageHistory" + args.batteryNumCLA  + ".txt", "a")
 value = datetime.datetime.fromtimestamp(time.time())
-voltageHistoryFile.write("\n========== " + value.strftime('%Y-%m-%d %H:%M:%S') + " ==========\n\n")
-v = np.random.randint(40, 45)
+if args.newBatteryCLA:
+    voltageHistoryFile.write("\n========== " + value.strftime('%Y-%m-%d %H:%M:%S') + " ========== (N)\n\n")
+else:
+    voltageHistoryFile.write("\n========== " + value.strftime('%Y-%m-%d %H:%M:%S') + " ==========\n\n")
+# v = np.random.randint(40, 45)
+v = 29.48
 m1 = 2
 m2 = 3
 voltageTime = 4
 value = datetime.datetime.fromtimestamp(time.time())
 voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Battery: " + args.batteryNumCLA + ") | " + str(v) + "v\n")
-voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Motor1)     | " + str(m1) + "v\n")
-voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Motor2)     | " + str(m2) + "v\n")
+voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Motor1)     | " + str(m1) + "amps\n")
+voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Motor2)     | " + str(m2) + "amps\n")
 voltageHistoryFile.write("\n")
 
 while True:
@@ -57,6 +69,7 @@ while True:
         voltageTime = time.time()
         value = datetime.datetime.fromtimestamp(time.time())
         voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Battery: " + args.batteryNumCLA + ") | " + str(v) + "v\n")
-        voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Motor1)     | " + str(m1) + "v\n")
-        voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Motor2)     | " + str(m2) + "v\n")
+        voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Motor1)     | " + str(m1) + "amps\n")
+        voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Motor2)     | " + str(m2) + "amps\n")
         voltageHistoryFile.write("\n")
+voltageHistoryFile.close()

@@ -72,6 +72,14 @@ parser.add_argument(
                      help    = 'Battery number.'
                     )
 
+parser.add_argument(
+                               '--newBattery',
+                     dest    = 'newBatteryCLA',
+                     action  = 'store_true',
+                     default = False,
+                     help    = 'If battery is recharged.'
+                    )
+
 args = parser.parse_args()
 
 # Clear imports
@@ -236,28 +244,34 @@ sumFPS     = 0.0
 
 motorTime     = 0
 runningMotors = 0
-forwardTime   = 4
+forwardTime   = 2
 
 ud = 0
 lr = 0
 
 lowVoltage    = 31
 exitVoltage   = 30
-voltageStatus = 1
-voltageHistoryFile = open("voltageHistory.txt", "a")
+voltageStatus =  1
+fanTime       = 25
+
+voltageHistoryFile = open("voltageHistory" + args.batteryNumCLA  + ".txt", "a")
 value = datetime.datetime.fromtimestamp(time.time())
-voltageHistoryFile.write("\n========== " + value.strftime('%Y-%m-%d %H:%M:%S') + " ==========\n\n")
+if args.newBatteryCLA:
+    voltageHistoryFile.write("\n========== " + value.strftime('%Y-%m-%d %H:%M:%S') + " ========== (N)\n\n")
+else:
+    voltageHistoryFile.write("\n========== " + value.strftime('%Y-%m-%d %H:%M:%S') + " ==========\n\n")
 v, m1, m2, voltageTime = voltage()
 value = datetime.datetime.fromtimestamp(time.time())
 voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Battery: " + args.batteryNumCLA + ") | " + str(v) + "v\n")
-voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Motor1)     | " + str(m1) + "v\n")
-voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Motor2)     | " + str(m2) + "v\n")
+voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Motor1)     | " + str(m1) + " amps\n")
+voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Motor2)     | " + str(m2) + " amps\n")
 voltageHistoryFile.write("\n")
 
 weightFile = open('weight.txt', 'r')
 txt = file_handle.readlines()
 lcWeight = int(txt[0])
 weightFile.close()
+print("Current Loadcell Weight: " + str(lcWeight))
 
 for frame1 in camera.capture_continuous(rawCapture, format = "bgr", use_video_port = True):
     # Check voltage every 60 frames (once a min)
@@ -275,8 +289,8 @@ for frame1 in camera.capture_continuous(rawCapture, format = "bgr", use_video_po
         # print("Motor2 : " + str(m2) + "v")
         value = datetime.datetime.fromtimestamp(time.time())
         voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Battery: " + args.batteryNumCLA + ") | " + str(v) + "v\n")
-        voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Motor1)     | " + str(m1) + "v\n")
-        voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Motor2)     | " + str(m2) + "v\n")
+        voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Motor1)     | " + str(m1) + " amps\n")
+        voltageHistoryFile.write(value.strftime('%Y-%m-%d %H:%M:%S') + " (Motor2)     | " + str(m2) + " amps\n")
         voltageHistoryFile.write("\n")
         #result = firebase.post('https://dook-726e9.firebaseio.com/',{'motor1':m1})
         #if result['name'] == '':
@@ -435,10 +449,10 @@ for frame1 in camera.capture_continuous(rawCapture, format = "bgr", use_video_po
                xmin   = int((box[1] * IM_WIDTH ))
                ymax   = int((box[2] * IM_HEIGHT))
                xmax   = int((box[3] * IM_WIDTH ))
-               cv2.circle(frame,(int((xmin + xmax) / 2),int((ymin + ymax) / 2)), 5, (0,255,0), -1)
+               cv2.circle(frame, (int((xmin + xmax) / 2), int((ymin + ymax) / 2)), 5, (0,255,0), -1)
                 # Get the 'primary' poop's x and y value
                if(np.squeeze(classes)[index] == 1 and scores[0][index] > poopMax):
-                   poopMax = scores[0][index]
+                   poopMax  = scores[0][index]
                    primaryx = int((boxes[0][index][1] * IM_WIDTH  + boxes[0][index][3] * IM_WIDTH ) / 2)
                    primaryy = int((boxes[0][index][0] * IM_HEIGHT + boxes[0][index][2] * IM_HEIGHT) / 2)
                # if(np.squeeze(classes)[index] == 2):
@@ -459,8 +473,8 @@ for frame1 in camera.capture_continuous(rawCapture, format = "bgr", use_video_po
             elif primaryx > int(IM_WIDTH / 2 - wideSpace) and primaryx < int(IM_WIDTH / 2 + wideSpace) and scores[0][0] >= THRESHOLD:
                 print('F')
                 forward()
-                #if primaryy > IM_HEIGHT * 0.9:
-                movingForward = True
+                if primaryy > IM_HEIGHT * 0.9:
+                    movingForward = True
             elif movingForward:
                 print('Relay & L')
                 movingForward = False
@@ -468,7 +482,6 @@ for frame1 in camera.capture_continuous(rawCapture, format = "bgr", use_video_po
                 # motorTime     = runMotorsNonBlocking()
                 # runningMotors = 1
                 runMotors(forwardTime)
-
                 #relayTimer = relay()
                 #relayOn = 1
             else:
@@ -486,7 +499,7 @@ for frame1 in camera.capture_continuous(rawCapture, format = "bgr", use_video_po
 
     # Check to turn off relay
     elapsedTime = time.time() - relayTimer
-    if elapsedTime > 20 and relayOn:
+    if elapsedTime > fanTime and relayOn:
         relayTurnOff()
         relayOn = 0
         # lcWeight = LoadCell(hx)
