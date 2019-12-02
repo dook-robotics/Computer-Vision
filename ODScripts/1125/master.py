@@ -39,7 +39,6 @@ from motors import *
 from remote import *
 from hardware import *
 
-
 # This defines where our database is online
 #firebase = firebase.FirebaseApplication('https://dook-726e9.firebaseio.com/')
 
@@ -123,7 +122,7 @@ else:
 # Object detection variables
 THRESHOLD     = 0.3
 ROPETHRESHOLD = 0.6
-wideSpace     = 25
+wideSpace     = 60
 
 # Movement detection (History)
 movingForward = False

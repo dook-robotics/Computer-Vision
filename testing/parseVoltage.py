@@ -2,23 +2,39 @@ import numpy as np
 import time
 import datetime
 import csv
+import argparse
 
+# ---------- Add command line arguments ----------
+parser = argparse.ArgumentParser(
+                                 description = 'Dook Robotics - Object Detection Master Script',
+                                 epilog = "Dook Robotics - https://github.com/dook-robotics"
+                                )
 
+parser.add_argument(
+                               '--battery',
+                     dest    = 'batteryNumCLA',
+                     required = True,
+                     help    = 'Battery number.'
+                    )
+
+args = parser.parse_args()
 
 voltageReadings = []
 voltageTiming = []
 
-voltageHistoryFile = open("voltageHistory2.txt", "r")
+voltageHistoryFile = open("voltageHistory" + args.batteryNumCLA + ".txt", "r")
 content = voltageHistoryFile.read()
 content = content.split('\n')
 
-count = 0
+count = -1
 maxLen = 0
 currLen = 0
-voltageReadings.append([])
-voltageTiming.append([])
+# voltageReadings.append([])
+# voltageTiming.append([])
+lastTime = 0
+lastVoltage = 0
 currentTime = datetime.datetime.now()
-for line in (content):
+for i, line in enumerate(content):
     if "=" in line:
         if "(N)" in line:
             if currLen > maxLen:
@@ -35,19 +51,30 @@ for line in (content):
         content.remove(line)
     elif "Battery" in line:
         currLen += 1
-        line = line.split("|")[1].replace("v", "")
-        voltageReadings[count].append(line)
+        if currLen != 1:
+            delta = currentTime - datetime.datetime.strptime(lastTime, "%H:%M:%S")
+            # print(delta.seconds)
+            if delta.seconds-1 > 1:
+                for i in range(delta.seconds-1):
+                    voltageReadings[count].append(lastVoltage)
+                    voltageTiming[count].append((datetime.datetime.strptime(lastTime, "%H:%M:%S") + datetime.timedelta(seconds=i+1)).strftime("%H:%M:%S"))
+                    pass
+        vReading = line.split("|")[1].replace("v", "")
+        voltageReadings[count].append(vReading)
         voltageTiming[count].append(currentTime.strftime("%H:%M:%S"))
-        currentTime = currentTime + datetime.timedelta(seconds=1)
+        print(voltageTiming)
+        lastTime = voltageTiming[count][len(voltageTiming[count]) -1]
+        lastVoltage = voltageReadings[count][len(voltageReadings[count]) -1]
+        currentTime = datetime.datetime.strptime(line.split('(')[0], "%Y-%m-%d %H:%M:%S ")
 
-print(voltageReadings)
-print("")
+# print(voltageReadings)
+# print("")
 print(voltageTiming)
 
 if maxLen == 0:
     maxLen = currLen
 
-with open('voltagecsv2.csv', mode='w') as vcsv:
+with open("voltagecsv" + args.batteryNumCLA + ".csv", mode='w') as vcsv:
     voltage_writer = csv.writer(vcsv, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     voltage_writer.writerow(np.arange(maxLen))
     for row in voltageReadings:
