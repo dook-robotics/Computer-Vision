@@ -53,9 +53,11 @@ def ps4(j):
             elif event.button == 4:
                 print("Pressed: L1")
                 buttonPressed = 7
+                
             elif event.button == 5:
                 print("Pressed: R1")
                 buttonPressed = 8
+
             elif event.button == 6:
                 print("Pressed: L2")
 
@@ -65,6 +67,7 @@ def ps4(j):
             elif event.button == 8:
                 print("Pressed: SHARE")
                 buttonPressed = 9
+
             elif event.button == 9:
                 print("Pressed: OPTIONS")
                 buttonPressed = 1
@@ -81,9 +84,8 @@ def ps4(j):
 
         elif event.type == pygame.JOYAXISMOTION:
             axis[event.axis] = round(event.value,2)
-            
+
     return buttonPressed, axis
 
 def controllerCount():
     return pygame.joystick.get_count()
-

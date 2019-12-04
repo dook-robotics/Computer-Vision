@@ -135,29 +135,27 @@ def runMotorsNonBlocking():
     GPIO.output(DIR2,GPIO.HIGH)
     return startTime
 
-def runMotors(seconds):
-    print("Running motors for " + str(seconds) + " seconds.")
-    startTime = time.time();
-    elapsedTime = time.time() - startTime
-    pwm.ChangeDutyCycle(AutoPower)
-    pwm2.ChangeDutyCycle(AutoPower)
-    GPIO.output(PWM1,GPIO.HIGH)
-    GPIO.output(DIR1,GPIO.LOW)
-    GPIO.output(PWM2,GPIO.HIGH)
-    GPIO.output(DIR2,GPIO.HIGH)
-    while elapsedTime < seconds:
-        elapsedTime = time.time() - startTime
-    stop()
-    return
+# def runMotors(seconds):
+#     print("Running motors for " + str(seconds) + " seconds.")
+#     startTime = time.time();
+#     elapsedTime = time.time() - startTime
+#     pwm.ChangeDutyCycle(AutoPower)
+#     pwm2.ChangeDutyCycle(AutoPower)
+#     GPIO.output(PWM1,GPIO.HIGH)
+#     GPIO.output(DIR1,GPIO.LOW)
+#     GPIO.output(PWM2,GPIO.HIGH)
+#     GPIO.output(DIR2,GPIO.HIGH)
+#     while elapsedTime < seconds:
+#         elapsedTime = time.time() - startTime
+#     stop()
+#     return
 
 
 def stop():
-    # print("Stop")
     pwm.ChangeDutyCycle(0)
     pwm2.ChangeDutyCycle(0)
 
 def forward():
-    # print("Forward")
     pwm.ChangeDutyCycle(AutoPower + 6.25)
     pwm2.ChangeDutyCycle(AutoPower)
     GPIO.output(PWM1,GPIO.HIGH)
@@ -166,7 +164,6 @@ def forward():
     GPIO.output(DIR2,GPIO.HIGH)
 
 def back():
-    # print("Back")
     pwm.ChangeDutyCycle(AutoPower + 5 + 6.25)
     pwm2.ChangeDutyCycle(AutoPower + 5)
     GPIO.output(PWM1,GPIO.LOW)
@@ -175,7 +172,6 @@ def back():
     GPIO.output(DIR2,GPIO.LOW)
 
 def left():
-    # print("Left")
     pwm.ChangeDutyCycle(16)
     pwm2.ChangeDutyCycle(8)
     GPIO.output(PWM1,GPIO.HIGH)
@@ -184,7 +180,6 @@ def left():
     GPIO.output(DIR2,GPIO.HIGH)
 
 def right(boost = 0):
-    # print("Right")
     pwm2.ChangeDutyCycle(10 + boost)
     pwm.ChangeDutyCycle(8 + boost)
     GPIO.output(PWM1,GPIO.HIGH)
@@ -192,33 +187,22 @@ def right(boost = 0):
     GPIO.output(PWM2,GPIO.HIGH)
     GPIO.output(DIR2,GPIO.LOW)
 
-
-
 def idle():
-    # print("IDLING")
 
-    #stop()
-    #time.sleep(0.5)
-    #i = 0 # Needed?
     avgDistance1 = 0
-
     for i in range(5):
         notRead = False
 
         # Take US Reading
         GPIO.output(TRIG_L, False)
-
         time.sleep(0.00001)
         GPIO.output(TRIG_L, True)
-
         time.sleep(0.00001)
         GPIO.output(TRIG_L, False)
-
 
         # Check whether the ECHO is LOW
         while GPIO.input(ECHO_L) == 0:
             pulse_start1 = time.time()
-
 
         if GPIO.input(ECHO_L) != 1:
             notRead = True
@@ -228,21 +212,17 @@ def idle():
             pulse_end1 = time.time()
 
         if not notRead:
-                 # Time to get back the pulse to sensor
+            # Time to get back the pulse to sensor
             pulse_duration1 = pulse_end1 - pulse_start1
 
-
-            #Multiply pulse duration by 17150 (34300/2) to get distance
-            distance1 = pulse_duration1 * 17150
-            distance1 = round(distance1, 2)
+            # Multiply pulse duration by 17150 (34300/2) to get distance
+            distance1    = pulse_duration1 * 17150
+            distance1    = round(distance1, 2)
             avgDistance1 = avgDistance1 + distance1
         else:
             avgDistance1 = -5
 
     avgDistance1 = avgDistance1 / 5
-
-    #print("USL:", avgDistance1)
-    #i = 0
 
     avgDistance2 = 0
     for i in range(5):
@@ -251,28 +231,23 @@ def idle():
 
         GPIO.output(TRIG_R, False)
         time.sleep(0.00001)
-
         GPIO.output(TRIG_R, True)
         time.sleep(0.00001)
-
         GPIO.output(TRIG_R, False)
 
         # Check whether the ECHO is LOW
-
         while(GPIO.input(ECHO_R) == 0):
             pulse_start2 = time.time()
-
-        # Check whether the ECHO is HIGH
 
         if GPIO.input(ECHO_R) != 1:
             notRead = True
 
+        # Check whether the ECHO is HIGH
         while GPIO.input(ECHO_R) == 1:
             pulse_end2 = time.time()
 
-        # Time to get back the pulse to sensor
-
         if not notRead:
+            # Time to get back the pulse to sensor
             pulse_duration2 = pulse_end2 - pulse_start2
 
             #Multiply pulse duration by 17150 (34300/2) to get distance
@@ -282,25 +257,13 @@ def idle():
         else:
             avgDistance2 = -5
 
-
     avgDistance2 = avgDistance2 / 5
 
-    #print("USR:", avgDistance2)
     print("USL:", avgDistance1, "USR:", avgDistance2)
 
-    # Check whether the distance is within 45 cm range
-    # This could be a much better alg, without sleeps...
     if avgDistance1 < 30 and avgDistance2 < 30:
-        #exit()
-        #back()
-	#uninteruptable back
-        currIdleTime = time.time()
         back()
         time.sleep(3)
-        #while time.time() - currIdleTime < 1.0:
-
-
-         #   sleep(0.2)
         return time.time()
     else:
         forward()

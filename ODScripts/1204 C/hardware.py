@@ -54,23 +54,18 @@ def servo(camDir):
     return
 
 def relay():
-    print("Relay On")
     GPIO.setup(RELAIS_1_GPIO, GPIO.OUT)
     GPIO.output(RELAIS_1_GPIO, GPIO.LOW)
     GPIO.output(RELAIS_1_GPIO, GPIO.HIGH)
     return time.time()
 
 def relayTurnOff():
-    print("Relay Off")
     GPIO.output(RELAIS_1_GPIO, GPIO.LOW)
     return
 
 def LoadCell(hx, offset):
     try:
-        print("Load Cell Check")
         val = hx.get_weight(25) * -1 + offset
-        print(val)
-        print(max(int(val), 0))
         hx.power_down()
         hx.power_up()
         return max(int(val), 0)
@@ -79,7 +74,6 @@ def LoadCell(hx, offset):
     return -1
 
 def voltage():
-    #print("Voltage Check")
     try:
         batteryVoltage = chan0.voltage * ((R1 + R2) / R2)
         motor1Current = (chan1.voltage - 2.55) * 10
@@ -104,9 +98,7 @@ def LoadCellInit():
     hx.set_reference_unit(441)
     hx.reset()
     hx.tare()
-    print("setup")
+    print("Setting up Load Cell")
     return hx
 
 hx = LoadCellInit()
-#LoadCell(hx)
-

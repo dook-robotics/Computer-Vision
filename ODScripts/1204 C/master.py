@@ -414,6 +414,7 @@ for frame1 in camera.capture_continuous(rawCapture, format = "bgr", use_video_po
                 stop()
                 if relayOn:
                     relayTurnOff()
+                    print("Relay Off")
                     relayOn = 0
                 runningMotors = 0
             elif ps4Switch == 3:
@@ -456,6 +457,7 @@ for frame1 in camera.capture_continuous(rawCapture, format = "bgr", use_video_po
                 print("Tripped Relay")
                 relayOn    = 1
                 relayTimer = relay()
+                print("Relay On")
 
     # Check for controller disconnect
     if not controllerCount():
@@ -559,6 +561,7 @@ for frame1 in camera.capture_continuous(rawCapture, format = "bgr", use_video_po
                 print("Tripped Relay")
                 relayOn = 1
                 relayTimer = relay()
+                print("Relay On")
                 print("Running motors for " + str(forwardTime) + " seconds.")
                 runningMotors = 1
                 motorTime = runMotorsNonBlocking()
@@ -578,7 +581,7 @@ for frame1 in camera.capture_continuous(rawCapture, format = "bgr", use_video_po
 
             # Check if we need to move Forrward
             elif primaryXMin > int(IM_WIDTH / 2 - wideSpace) and primaryXMax < int(IM_WIDTH / 2 + wideSpace) and scores[0][0] >= THRESHOLD:
-                print('Forrward')
+                print('Forward')
                 forward()
                 if primaryy > IM_HEIGHT * GLZone:
                     poopInGLZ = True
@@ -688,6 +691,7 @@ for frame1 in camera.capture_continuous(rawCapture, format = "bgr", use_video_po
         # Turn off relay
         relayTurnOff()
         relayOn = 0
+        print("Relay Off")
 
         # Sleep to allow time for fan to wind down
         time.sleep(10)
@@ -705,8 +709,10 @@ for frame1 in camera.capture_continuous(rawCapture, format = "bgr", use_video_po
              weightOffSet = 0
              hx = LoadCellInit()
 
+        # Preform the load cell check
         print("Checking weight with offset", weightOffSet)
         lcWeight = LoadCell(hx, weightOffSet)
+        print("Load Cell Check:", lcWeight)
 
         # Post new value to firebase
         if not args.noFirebaseCLA:
